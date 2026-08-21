@@ -1,0 +1,45 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\El Sarra\\Desktop\\proyecto\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb\\VacanJefWeb.csproj|c:\\users\\el sarra\\desktop\\proyecto\\vacanjefweb\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb\\VacanJefWeb.csproj|solutionrelative:vacanjefweb\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 248,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\El Sarra\\Desktop\\proyecto\\VacanJefWeb\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "VacanJefWeb\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\El Sarra\\Desktop\\proyecto\\VacanJefWeb\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "VacanJefWeb\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-06-20T19:46:10.545Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

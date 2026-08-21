@@ -1,0 +1,202 @@
+@model RegistroClienteViewModel
+@{
+    ViewData["Title"] = "Registro de cliente";
+    ViewData["BodyClass"] = "login-body";
+    ViewData["FullScreen"] = true;
+    Layout = "_Layout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css">
+    <style>
+      .reg-wrapper {
+        position:relative;z-index:10;width:100%;max-width:780px;
+        margin:0.6rem auto;border-radius:22px;overflow:hidden;
+        box-shadow:0 24px 60px rgba(26,12,2,0.75),0 0 0 1px rgba(245,166,35,0.15);
+        background:linear-gradient(170deg,#FFFCF5 0%,#FDF0D5 100%);
+        max-height:96vh;display:flex;flex-direction:column;
+      }
+      .reg-header {
+        background:linear-gradient(135deg,#2C1503,#7B4A1E);
+        padding:1rem 1.8rem;display:flex;align-items:center;gap:0.85rem;flex-shrink:0;
+      }
+      .reg-header img { width:46px;height:46px; }
+      .reg-header h1 { font-family:"Syne",sans-serif;font-size:1.2rem;font-weight:800;color:#FFD166;margin:0; }
+      .reg-header p  { color:rgba(253,240,213,0.65);font-size:0.78rem;font-weight:600;margin:0; }
+      .reg-body { padding:1.1rem 1.8rem;overflow-y:auto;flex:1; }
+      .reg-section { margin-bottom:1.1rem; }
+      .reg-section-title {
+        font-family:"Syne",sans-serif;font-size:0.78rem;font-weight:800;color:#7B4A1E;
+        text-transform:uppercase;letter-spacing:0.06em;
+        padding-bottom:0.35rem;border-bottom:2px solid #F5E2B0;margin-bottom:0.75rem;
+        display:flex;align-items:center;gap:0.4rem;
+      }
+      .reg-grid   { display:grid;grid-template-columns:1fr 1fr;gap:0.65rem; }
+      .reg-grid.three { grid-template-columns:1fr 1fr 1fr; }
+      .field-group { margin-bottom:0; }
+      .field-label {
+        display:block;font-size:0.72rem;font-weight:800;color:#7B4A1E;
+        margin-bottom:0.25rem;letter-spacing:0.03em;text-transform:uppercase;
+      }
+      .field-input {
+        width:100%;height:40px;padding:0 11px;
+        border:1.5px solid #DFC08A;border-radius:10px;
+        font-family:"Nunito",sans-serif;font-size:0.86rem;color:#2C1503;
+        background:#FFFCF5;outline:none;transition:all 0.22s ease;
+      }
+      .field-input:focus { border-color:#F5A623;box-shadow:0 0 0 3px rgba(245,166,35,0.15); }
+      .field-error  { color:#C0392B;font-size:0.72rem;font-weight:700;margin-top:2px;display:block; }
+      .optional-badge {
+        font-size:0.62rem;background:#F5E2B0;color:#8C6B45;
+        border-radius:5px;padding:1px 5px;font-weight:700;margin-left:5px;vertical-align:middle;
+      }
+      .reg-footer {
+        display:flex;gap:0.75rem;align-items:center;justify-content:space-between;
+        padding:0.9rem 1.8rem;border-top:1px solid #F5E2B0;flex-wrap:wrap;flex-shrink:0;
+      }
+      .btn-reg {
+        background:linear-gradient(135deg,#FFD166 0%,#F5A623 40%,#C47A0A 100%);
+        border:none;border-radius:11px;padding:0.7rem 1.8rem;
+        font-family:"Nunito",sans-serif;font-weight:900;font-size:0.92rem;color:#2C1503;
+        cursor:pointer;box-shadow:0 4px 16px rgba(245,166,35,0.4);
+        transition:all 0.22s ease;display:inline-flex;align-items:center;gap:7px;
+      }
+      .btn-reg:hover { transform:translateY(-2px);box-shadow:0 7px 20px rgba(245,166,35,0.5); }
+      .btn-back {
+        background:none;border:1.5px solid #DFC08A;border-radius:11px;
+        padding:0.7rem 1.3rem;font-family:"Nunito",sans-serif;
+        font-weight:800;font-size:0.85rem;color:#7B4A1E;
+        cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;
+      }
+      .btn-back:hover { background:#F5E2B0; }
+      .pass-wrapper { position:relative; }
+      .pass-wrapper .field-input { padding-right:38px; }
+      .pass-wrapper .toggle-pass {
+        position:absolute;right:9px;top:50%;transform:translateY(-50%);
+        background:none;border:none;cursor:pointer;font-size:0.85rem;color:#DFC08A;
+      }
+      @@media(max-width:600px){
+        .reg-grid,.reg-grid.three{grid-template-columns:1fr;}
+        .reg-body{padding:0.9rem 1rem;}
+        .reg-footer{padding:0.8rem 1rem;}
+      }
+    </style>
+}
+
+<div class="bg-layer"></div>
+<div class="paws-bg" id="pawsBg"></div>
+
+<div class="reg-wrapper">
+  <div class="reg-header">
+    <img src="~/images/logo.png" alt="VacanJef">
+    <div>
+      <h1>Registro de cliente</h1>
+      <p>Crea tu cuenta para reservar y hacer seguimiento de tu mascota</p>
+    </div>
+  </div>
+
+  <form method="post" asp-action="Cliente" asp-controller="Registro" style="display:flex;flex-direction:column;flex:1;min-height:0;">
+    @Html.AntiForgeryToken()
+    <div class="reg-body">
+
+      @if (!ViewData.ModelState.IsValid)
+      {
+        <div class="alert-msg error show" style="margin-bottom:0.8rem;">
+          <span>⚠️</span><div>@Html.ValidationSummary(false)</div>
+        </div>
+      }
+
+      <!-- Datos personales -->
+      <div class="reg-section">
+        <div class="reg-section-title">🐾 Datos personales</div>
+        <div class="reg-grid">
+          <div class="field-group">
+            <label class="field-label" asp-for="Nombre">Nombre *</label>
+            <input class="field-input" asp-for="Nombre" placeholder="Tu nombre">
+            <span class="field-error" asp-validation-for="Nombre"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" asp-for="Apellido">Apellido *</label>
+            <input class="field-input" asp-for="Apellido" placeholder="Tu apellido">
+            <span class="field-error" asp-validation-for="Apellido"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" asp-for="Telefono">Teléfono <span class="optional-badge">Opcional</span></label>
+            <input class="field-input" asp-for="Telefono" placeholder="300 000 0000">
+          </div>
+          <div class="field-group">
+            <label class="field-label" asp-for="Direccion">Dirección <span class="optional-badge">Opcional</span></label>
+            <input class="field-input" asp-for="Direccion" placeholder="Calle 10 # 20-30, Medellín">
+          </div>
+        </div>
+      </div>
+
+      <!-- Credenciales -->
+      <div class="reg-section">
+        <div class="reg-section-title">🔐 Credenciales de acceso</div>
+        <div class="reg-grid">
+          <div class="field-group" style="grid-column:1/-1;">
+            <label class="field-label" asp-for="Correo">Correo electrónico *</label>
+            <input class="field-input" asp-for="Correo" type="email" placeholder="ejemplo@correo.com" autocomplete="email">
+            <span class="field-error" asp-validation-for="Correo"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" asp-for="Password">Contraseña * <small style="font-size:0.65rem;color:#8C6B45;font-weight:600;">(mín. 6)</small></label>
+            <div class="pass-wrapper">
+              <input class="field-input" asp-for="Password" type="password" id="pw1" placeholder="••••••••" autocomplete="new-password">
+              <button type="button" class="toggle-pass" onclick="togglePw('pw1',this)">👁️</button>
+            </div>
+            <span class="field-error" asp-validation-for="Password"></span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" asp-for="ConfirmarPassword">Confirmar contraseña *</label>
+            <div class="pass-wrapper">
+              <input class="field-input" asp-for="ConfirmarPassword" type="password" id="pw2" placeholder="••••••••" autocomplete="new-password">
+              <button type="button" class="toggle-pass" onclick="togglePw('pw2',this)">👁️</button>
+            </div>
+            <span class="field-error" asp-validation-for="ConfirmarPassword"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contacto de emergencia -->
+      <div class="reg-section">
+        <div class="reg-section-title">🚨 Contacto de emergencia <span class="optional-badge">Opcional</span></div>
+        <div class="reg-grid three">
+          <div class="field-group">
+            <label class="field-label" asp-for="ContactoNombre">Nombre</label>
+            <input class="field-input" asp-for="ContactoNombre" placeholder="Nombre">
+          </div>
+          <div class="field-group">
+            <label class="field-label" asp-for="ContactoApellido">Apellido</label>
+            <input class="field-input" asp-for="ContactoApellido" placeholder="Apellido">
+          </div>
+          <div class="field-group">
+            <label class="field-label" asp-for="ContactoParentesco">Parentesco</label>
+            <input class="field-input" asp-for="ContactoParentesco" placeholder="Ej: Mamá, Hermano">
+          </div>
+          <div class="field-group" style="grid-column:1/-1;">
+            <label class="field-label" asp-for="ContactoTelefono">Teléfono de emergencia</label>
+            <input class="field-input" asp-for="ContactoTelefono" placeholder="300 000 0000">
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /reg-body -->
+
+    <div class="reg-footer">
+      <a class="btn-back" href="@Url.Action("Login","Cuenta")">← Volver</a>
+      <button class="btn-reg" type="submit">Crear cuenta 🐾</button>
+    </div>
+  </form>
+</div>
+
+@section Scripts {
+<script src="~/js/login.js"></script>
+<script>
+  function togglePw(id, btn) {
+    const i = document.getElementById(id);
+    i.type = i.type === 'text' ? 'password' : 'text';
+    btn.textContent = i.type === 'password' ? '👁️' : '🙈';
+  }
+</script>
+}

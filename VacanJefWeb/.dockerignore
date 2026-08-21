@@ -1,0 +1,43 @@
+# ============================================================
+# .dockerignore — VacanJef
+# Excluye archivos que NO deben copiarse al contenedor
+# ============================================================
+
+# Carpetas de compilación local (se generan dentro del contenedor)
+**/bin/
+**/obj/
+
+# Configuración local de Visual Studio
+.vs/
+*.user
+*.suo
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Archivos de entorno locales (el contenedor usa variables de entorno)
+appsettings.Development.json
+
+# Logs
+*.log
+logs/
+
+# Docker (no se necesita dentro del contenedor)
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Node modules si hubiera
+node_modules/
+
+# Archivos temporales
+*.tmp
+*.temp
+Thumbs.db
+.DS_Store
+
+# README y documentación (opcional incluirlos)
+README.md
+GUIA_PRESENTACION.md

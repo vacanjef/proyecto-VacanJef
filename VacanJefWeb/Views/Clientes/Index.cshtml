@@ -1,0 +1,108 @@
+@model ClienteListaViewModel
+@{ ViewData["Title"] = "Clientes"; }
+
+<!-- Barra superior con Regresar -->
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap;">
+  <a href="@Url.Action("Admin","Dashboard")"
+     style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">
+    ← Regresar
+  </a>
+  <div>
+    <h1 style="margin:0;font-family:'Syne',sans-serif;font-size:1.5rem;color:var(--cacao);">👥 Clientes</h1>
+    <p style="margin:0;font-size:0.82rem;color:var(--muted);font-weight:600;">Todos los clientes registrados en VacanJef</p>
+  </div>
+</div>
+
+<!-- Tarjetas KPI -->
+<div class="grid-stats" style="margin-bottom:1.3rem;">
+  <a href="?filtro=todos" class="stat" style="text-decoration:none;cursor:pointer;border:2px solid @(Model.Filtro=="todos"?"var(--sol)":"var(--arena-borde)");">
+    <div class="num">@Model.TotalGeneral</div><div class="label">Total clientes</div>
+  </a>
+  <a href="?filtro=mes" class="stat" style="text-decoration:none;cursor:pointer;border:2px solid @(Model.Filtro=="mes"?"var(--sol)":"var(--arena-borde)");">
+    <div class="num">@Model.TotalMes</div><div class="label">Este mes</div>
+  </a>
+  <a href="?filtro=semana" class="stat" style="text-decoration:none;cursor:pointer;border:2px solid @(Model.Filtro=="semana"?"var(--sol)":"var(--arena-borde)");">
+    <div class="num">@Model.TotalSemana</div><div class="label">Esta semana</div>
+  </a>
+  <a href="?filtro=hoy" class="stat" style="text-decoration:none;cursor:pointer;border:2px solid @(Model.Filtro=="hoy"?"var(--sol)":"var(--arena-borde)");">
+    <div class="num">@Model.TotalHoy</div><div class="label">Hoy</div>
+  </a>
+</div>
+
+<!-- Filtros -->
+<div class="card" style="margin-bottom:1.1rem;">
+  <form method="get" asp-action="Index" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:flex-end;">
+    <div class="field-group" style="flex:1;min-width:180px;margin:0;">
+      <label class="field-label">Buscar</label>
+      <input class="field-input" name="q" value="@Model.Busqueda"
+             placeholder="Nombre, apellido o correo..." style="height:40px;">
+    </div>
+    <div class="field-group" style="margin:0;">
+      <label class="field-label">Desde</label>
+      <input class="field-input" type="date" name="desde"
+             value="@Model.FechaDesde?.ToString("yyyy-MM-dd")"
+             style="height:40px;min-width:150px;">
+    </div>
+    <div class="field-group" style="margin:0;">
+      <label class="field-label">Hasta</label>
+      <input class="field-input" type="date" name="hasta"
+             value="@Model.FechaHasta?.ToString("yyyy-MM-dd")"
+             style="height:40px;min-width:150px;">
+    </div>
+    <input type="hidden" name="filtro" value="rango">
+    <button type="submit" class="btn btn-primary" style="height:40px;align-self:flex-end;">Filtrar</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary" style="height:40px;align-self:flex-end;">Limpiar</a>
+  </form>
+</div>
+
+<!-- Tabla -->
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.9rem;flex-wrap:wrap;gap:0.5rem;">
+    <h2 style="margin:0;">
+      @(Model.Filtro switch {
+        "hoy"    => "Registrados hoy",
+        "semana" => "Registrados esta semana",
+        "mes"    => "Registrados este mes",
+        "rango"  => "Rango personalizado",
+        _        => "Todos los clientes"
+      })
+      <span style="font-size:0.78rem;color:var(--muted);font-weight:700;"> (@Model.Clientes.Count)</span>
+    </h2>
+  </div>
+
+  @if (!Model.Clientes.Any())
+  {
+    <div class="empty-state">No se encontraron clientes con esos filtros.</div>
+  }
+  else
+  {
+    <table class="data">
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Correo</th><th>Teléfono</th>
+          <th>Registrado</th><th>Estado</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+      @foreach (var c in Model.Clientes)
+      {
+        <tr>
+          <td style="font-family:monospace;font-size:0.78rem;color:var(--muted);">#@c.IdCliente</td>
+          <td><strong>@c.Nombre @c.Apellido</strong></td>
+          <td>@c.Correo</td>
+          <td>@c.Telefono</td>
+          <td>@c.FechaRegistro.ToString("dd/MM/yyyy")</td>
+          <td>
+            <span class="badge" style="background:@(c.Activo?"rgba(39,103,73,0.12)":"rgba(192,57,43,0.1)");color:@(c.Activo?"var(--exito)":"var(--error)");">
+              @(c.Activo ? "Activo" : "Inactivo")
+            </span>
+          </td>
+          <td>
+            <a class="btn btn-secondary btn-sm" href="@Url.Action("Details",new{id=c.IdCliente})">Ver detalle</a>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+</div>

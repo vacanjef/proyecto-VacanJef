@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: vacanjef-sqlserver
+    environment:
+      SA_PASSWORD: "VacanJef2026!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - vacanjef-data:/var/opt/mssql
+      - ./sql:/scripts
+    networks:
+      - vacanjef-net
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'VacanJef2026!' -Q 'SELECT 1' -No || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  web:
+    build: .
+    container_name: vacanjef-app
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__VacanJefDb=Server=vacanjef-sqlserver,1433;Database=VacanJef;User Id=sa;Password=VacanJef2026!;TrustServerCertificate=True;MultipleActiveResultSets=True
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - vacanjef-net
+
+networks:
+  vacanjef-net:
+    driver: bridge
+
+volumes:
+  vacanjef-data:
+    name: vacanjef-sqldata

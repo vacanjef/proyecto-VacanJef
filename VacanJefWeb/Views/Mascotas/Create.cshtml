@@ -1,0 +1,90 @@
+@model MascotaFormViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{ ViewData["Title"] = "Registrar mascota"; }
+
+<h1>Registrar mascota</h1>
+<p class="subtitle">Completa la información de tu compañero peludo</p>
+
+<div class="card" style="max-width:640px;">
+  @if (!ViewData.ModelState.IsValid)
+  {
+    <div class="alert alert-error">@Html.ValidationSummary(false)</div>
+  }
+  <form method="post" asp-action="Create">
+    @Html.AntiForgeryToken()
+
+    @if (ViewBag.Clientes != null)
+    {
+      <div class="field-group">
+        <label class="field-label">Dueño</label>
+        <select class="field-input" asp-for="IdClienteSeleccionado" asp-items="@(new SelectList(ViewBag.Clientes,"IdCliente","Nombre"))">
+          <option value="">-- Selecciona el cliente --</option>
+        </select>
+      </div>
+    }
+
+    <div class="form-row">
+      <div class="field-group">
+        <label class="field-label" asp-for="Nombre">Nombre</label>
+        <input class="field-input" asp-for="Nombre">
+        <span class="field-error" asp-validation-for="Nombre"></span>
+      </div>
+      <div class="field-group">
+        <label class="field-label" asp-for="Especie">Especie</label>
+        <select class="field-input" asp-for="Especie">
+          <option value="">-- Selecciona --</option>
+          <option>Perro</option><option>Gato</option><option>Ave</option><option>Conejo</option><option>Otro</option>
+        </select>
+        <span class="field-error" asp-validation-for="Especie"></span>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field-group">
+        <label class="field-label" asp-for="Raza">Raza</label>
+        <input class="field-input" asp-for="Raza">
+      </div>
+      <div class="field-group">
+        <label class="field-label" asp-for="Sexo">Sexo</label>
+        <select class="field-input" asp-for="Sexo">
+          <option value="">-- Selecciona --</option>
+          <option value="M">Macho</option><option value="H">Hembra</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field-group">
+        <label class="field-label" asp-for="FechaNacimiento">Fecha de nacimiento</label>
+        <input class="field-input" asp-for="FechaNacimiento" type="date">
+      </div>
+      <div class="field-group">
+        <label class="field-label" asp-for="PesoKg">Peso (kg)</label>
+        <input class="field-input" asp-for="PesoKg" type="number" step="0.1">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" asp-for="Color">Color</label>
+      <input class="field-input" asp-for="Color">
+    </div>
+    <div class="field-group">
+      <label class="field-label" asp-for="Alergias">Alergias</label>
+      <input class="field-input" asp-for="Alergias" placeholder="Ninguna, si no aplica">
+    </div>
+    <div class="field-group">
+      <label class="field-label" asp-for="Medicamentos">Medicamentos</label>
+      <input class="field-input" asp-for="Medicamentos" placeholder="Ninguno, si no aplica">
+    </div>
+    <div class="field-group">
+      <label class="field-label" asp-for="CarnetVacunas">Carné de vacunas</label>
+      <input class="field-input" asp-for="CarnetVacunas" placeholder="Al día / pendiente">
+    </div>
+    <div class="field-group">
+      <label class="field-label" asp-for="Observaciones">Observaciones</label>
+      <textarea class="field-input" asp-for="Observaciones" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registrar mascota</button>
+  </form>
+</div>

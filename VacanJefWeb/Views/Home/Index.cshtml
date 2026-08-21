@@ -1,0 +1,422 @@
+@{
+    ViewData["Title"] = "Club Canino VacanJef";
+    ViewData["FullWidth"] = true;
+    Layout = "_Layout";
+    var servicios = (IEnumerable<VacanJefWeb.Models.TipoServicio>)ViewBag.Servicios;
+    var estaAutenticado = User.Identity?.IsAuthenticated == true;
+}
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; }
+.home{ overflow-x:hidden; font-family:"Nunito",sans-serif; color:#222; background:#fff; }
+
+/* ── HERO ───────────────────────────────────────────────── */
+.hero{
+  height:100vh; min-height:620px;
+  background-image:url('/images/instalaciones/juegos.jpg');
+  background-size:cover; background-position:center;
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.hero-overlay{
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(26,12,2,0.65) 100%);
+}
+.hero-content{
+  position:relative; z-index:2; text-align:center;
+  color:#fff; padding:20px; max-width:860px;
+}
+.hero-logo-img{
+  width:170px; height:170px; object-fit:contain;
+  margin:0 auto 1.4rem; display:block;
+  filter:drop-shadow(0 8px 32px rgba(0,0,0,0.6));
+  animation:heroPulse 4s ease-in-out infinite;
+}
+@@keyframes heroPulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+.hero-eyebrow{
+  display:inline-block; margin-bottom:1rem;
+  padding:5px 22px; border:1px solid rgba(245,166,35,0.6);
+  border-radius:50px; font-size:0.78rem; font-weight:700;
+  color:rgba(255,209,102,0.95); letter-spacing:0.1em; text-transform:uppercase;
+  background:rgba(245,166,35,0.1);
+}
+.hero-content h1{
+  font-family:"Syne",sans-serif;
+  font-size:75px;
+  font-weight:800; margin-bottom:0.8rem; line-height:1.05;
+  text-shadow:0 4px 20px rgba(0,0,0,0.5);
+}
+.hero-content h1 span{
+  background:linear-gradient(135deg,#FFD166,#F5A623);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.hero-content p{
+  font-size:24px; margin-bottom:2.2rem;
+  color:rgba(255,255,255,0.8); font-weight:500;
+}
+.hero-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:1rem 2.6rem;
+  background:linear-gradient(135deg,#FFD166,#F5A623,#C47A0A);
+  color:#1A0C02; font-family:"Syne",sans-serif; font-weight:800; font-size:1.05rem;
+  text-decoration:none; border-radius:50px;
+  box-shadow:0 6px 28px rgba(245,166,35,0.5);
+  transition:all 0.3s cubic-bezier(0.34,1.5,0.64,1);
+}
+.hero-btn:hover{ transform:translateY(-5px); box-shadow:0 14px 36px rgba(245,166,35,0.65); }
+
+/* ── STATS ──────────────────────────────────────────────── */
+.stats-strip{
+  display:flex; flex-wrap:wrap;
+  background:#fff; border-bottom:1px solid #F0E8D5;
+  box-shadow:0 4px 20px rgba(0,0,0,0.06);
+}
+.stat-item{
+  flex:1; min-width:140px; text-align:center;
+  padding:1.6rem 1rem; border-right:1px solid #F0E8D5;
+}
+.stat-item:last-child{ border-right:none; }
+.stat-num{ font-family:"Syne",sans-serif; font-size:2.2rem; font-weight:800; color:#C47A0A; }
+.stat-lbl{ font-size:0.7rem; color:#8C6B45; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-top:3px; }
+
+/* ── SECCIÓN BASE ───────────────────────────────────────── */
+.sec{ padding:100px 8%; }
+.sec-label{ font-size:0.72rem; font-weight:800; color:#F5A623; letter-spacing:0.12em; text-transform:uppercase; text-align:center; margin-bottom:0.5rem; }
+.sec-title{ font-family:"Syne",sans-serif; font-size:45px; font-weight:800; text-align:center; margin-bottom:60px; color:#1A0C02; }
+.sec-title span{ color:#C47A0A; }
+
+/* ── GALERÍA ────────────────────────────────────────────── */
+.galeria-sec{ background:#f8f6f2; }
+.galeria{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+}
+.gal-card{
+  position:relative; overflow:hidden; border-radius:20px;
+  min-height:300px; cursor:pointer;
+  box-shadow:0 8px 24px rgba(0,0,0,0.1);
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+.gal-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.16); }
+.gal-card img{
+  width:100%; height:100%; object-fit:cover;
+  transition:transform 0.7s ease; display:block;
+}
+.gal-card:hover img{ transform:scale(1.08); }
+.gal-card::before{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%);
+  z-index:1;
+}
+.gal-info{ position:absolute; left:22px; bottom:22px; z-index:2; color:#fff; }
+.gal-info h3{ font-family:"Syne",sans-serif; font-size:32px; font-weight:800; }
+.gal-info p{ font-size:16px; color:rgba(255,255,255,0.75); margin-top:4px; }
+.gal-grande{ grid-column:span 2; }
+.gal-vertical{ min-height:480px; }
+@@media(max-width:700px){ .gal-grande{ grid-column:span 1; } }
+
+/* ── SECCIÓN CÁMARAS ────────────────────────────────────── */
+.camaras-sec{ background:#fff; }
+.cam-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:28px;
+}
+.cam-card{
+  background:#fff; border-radius:20px; overflow:hidden;
+  box-shadow:0 6px 20px rgba(0,0,0,0.07); border:1px solid #F0E8D5;
+  transition:all 0.3s ease;
+}
+.cam-card:hover{ transform:translateY(-10px); box-shadow:0 20px 44px rgba(0,0,0,0.12); border-color:#F5A623; }
+.cam-card img{ width:100%; height:230px; object-fit:cover; display:block; }
+.cam-card-body{ padding:1.4rem; }
+.cam-card-body h3{ font-family:"Syne",sans-serif; font-size:25px; font-weight:800; margin-bottom:0.4rem; color:#1A0C02; }
+.cam-card-body p{ color:#666; font-size:0.88rem; line-height:1.6; }
+
+/* ── SLIDER ─────────────────────────────────────────────── */
+.slider-sec{ background:#f8f6f2; padding:100px 0; overflow:hidden; }
+.slider-sec .sec-title{ margin-bottom:40px; }
+.slider-wrap{ width:100%; overflow:hidden; }
+.slide-track{
+  display:flex;
+  width:calc(320px * 22);
+  animation:scrollSlide 42s linear infinite;
+}
+.slide-track:hover{ animation-play-state:paused; }
+.slide-track img{
+  width:300px; height:210px; object-fit:cover;
+  border-radius:16px; margin:0 10px; flex-shrink:0;
+  box-shadow:0 6px 20px rgba(0,0,0,0.12);
+  transition:transform 0.3s ease;
+}
+.slide-track img:hover{ transform:scale(1.05); }
+@@keyframes scrollSlide{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(calc(-320px * 11)); }
+}
+
+/* ── SERVICIOS Y PRECIOS ────────────────────────────────── */
+.precios-sec{ background:#fff; }
+.precios-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1.1rem; }
+.precio-card{
+  background:#fff; border:1.5px solid #F0E8D5; border-radius:18px;
+  padding:1.6rem 1.2rem; text-align:center;
+  transition:all 0.25s ease; box-shadow:0 3px 10px rgba(0,0,0,0.04);
+}
+.precio-card:hover{ transform:translateY(-5px); border-color:#F5A623; box-shadow:0 10px 28px rgba(245,166,35,0.15); }
+.precio-icon{ font-size:2.4rem; margin-bottom:0.7rem; }
+.precio-nombre{ font-family:"Syne",sans-serif; font-size:0.9rem; font-weight:800; color:#1A0C02; margin-bottom:0.3rem; }
+.precio-desc{ font-size:0.76rem; color:#8C6B45; line-height:1.5; margin-bottom:0.8rem; }
+.precio-valor{ font-family:"Syne",sans-serif; font-size:1.5rem; font-weight:800; color:#C47A0A; }
+.precio-unidad{ font-size:0.62rem; color:#8C6B45; font-weight:700; }
+
+/* ── NOSOTROS ───────────────────────────────────────────── */
+.nosotros-sec{ background:#f8f6f2; }
+.nosotros-inner{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; max-width:1200px; margin:0 auto; }
+@@media(max-width:700px){ .nosotros-inner{ grid-template-columns:1fr; } }
+.nosotros-img{ border-radius:22px; overflow:hidden; box-shadow:0 16px 48px rgba(0,0,0,0.12); }
+.nosotros-img img{ width:100%; display:block; object-fit:cover; aspect-ratio:4/3; }
+.nosotros-text .sec-label,.nosotros-text .sec-title{ text-align:left; }
+.nosotros-text .sec-title{ margin-bottom:1rem; font-size:2rem; }
+.nosotros-text p{ color:#5A4A30; font-size:0.92rem; line-height:1.7; margin-bottom:1.2rem; }
+.checks{ display:flex; flex-direction:column; gap:0.65rem; }
+.chk{ display:flex; align-items:flex-start; gap:0.7rem; font-size:0.88rem; color:#3A2A10; font-weight:600; line-height:1.4; }
+.chk-dot{ width:22px; height:22px; border-radius:7px; background:linear-gradient(135deg,#FFD166,#F5A623); display:flex; align-items:center; justify-content:center; font-size:0.65rem; color:#1A0C02; flex-shrink:0; margin-top:1px; }
+
+/* ── CTA ────────────────────────────────────────────────── */
+.cta-sec{
+  background:linear-gradient(150deg,#1A0C02 0%,#2E1508 50%,#1A0C02 100%);
+  padding:100px 8%; text-align:center; position:relative; overflow:hidden;
+}
+.cta-sec::before{
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 20% 0%,rgba(245,166,35,0.14) 0%,transparent 60%),
+             radial-gradient(ellipse at 85% 100%,rgba(123,74,30,0.1) 0%,transparent 55%);
+}
+.cta-sec h2{ font-family:"Syne",sans-serif; font-size:clamp(2rem,4vw,3rem); font-weight:800; color:#FFD166; margin-bottom:0.6rem; position:relative; }
+.cta-sec p{ color:rgba(253,240,213,0.5); font-size:1rem; margin-bottom:2rem; position:relative; }
+.cta-contact{ display:flex; justify-content:center; gap:3rem; flex-wrap:wrap; margin-bottom:2.5rem; position:relative; }
+.cta-c-lbl{ font-size:0.64rem; color:rgba(245,166,35,0.5); font-weight:800; text-transform:uppercase; letter-spacing:0.08em; }
+.cta-c-val{ font-size:0.95rem; color:rgba(253,240,213,0.8); font-weight:700; margin-top:2px; }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.home-footer{
+  background:#111; color:#fff; text-align:center; padding:60px 20px;
+}
+.home-footer img{ width:80px; height:80px; object-fit:contain; margin:0 auto 1rem; display:block; opacity:0.9; }
+.home-footer h2{ font-family:"Syne",sans-serif; font-size:35px; margin-bottom:0.5rem; color:#FFD166; }
+.home-footer p{ color:rgba(255,255,255,0.4); margin-bottom:1.5rem; font-size:0.86rem; }
+.social-links{ display:flex; justify-content:center; gap:14px; }
+.social-btn{
+  width:46px; height:46px; background:#F5A623; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#1A0C02; font-size:1.1rem; text-decoration:none;
+  transition:all 0.3s ease;
+}
+.social-btn:hover{ transform:translateY(-8px); background:#FFD166; }
+
+/* ── RESPONSIVE (igual a la referencia: breakpoint 900px) ── */
+@@media(max-width:900px){
+  .hero-content h1{ font-size:45px; }
+  .hero-content p{ font-size:18px; }
+  .sec-title{ font-size:30px; }
+  .gal-grande{ grid-column:span 1; }
+}
+</style>
+
+<div class="home">
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <img class="hero-logo-img" src="~/images/logo.png" alt="Club Canino VacanJef">
+    <div class="hero-eyebrow">Guardería Canina Premium · Medellín</div>
+    <h1>Donde cada<br><span>huella importa</span></h1>
+    <p>Amor, diversión y cuidado profesional para tu mascota 🐶</p>
+    @if (estaAutenticado)
+    {
+      <a class="hero-btn" href="@Url.Action("Index","Dashboard")">Ir a mi panel →</a>
+    }
+    else
+    {
+      <a class="hero-btn" href="@Url.Action("Login","Cuenta")">Ingresar al sistema →</a>
+    }
+  </div>
+</section>
+
+<!-- ══ STATS ══════════════════════════════════════════════ -->
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-num">+50</div><div class="stat-lbl">Mascotas cuidadas</div></div>
+  <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Cámaras en vivo</div></div>
+  <div class="stat-item"><div class="stat-num">8</div><div class="stat-lbl">Cuidadores expertos</div></div>
+  <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">Satisfacción</div></div>
+  <div class="stat-item"><div class="stat-num">6</div><div class="stat-lbl">Servicios disponibles</div></div>
+</div>
+
+<!-- ══ GALERÍA ════════════════════════════════════════════ -->
+<section class="sec galeria-sec" id="galeria">
+  <div class="sec-label">Nuestras instalaciones</div>
+  <h2 class="sec-title">Espacios creados para <span>su felicidad</span></h2>
+  <div class="galeria">
+    <div class="gal-card gal-grande">
+      <img src="~/images/instalaciones/juegos.jpg" alt="Zona de juegos">
+      <div class="gal-info"><h3>Zona de Juegos</h3><p>Amplios espacios interiores para diversión y socialización.</p></div>
+    </div>
+    <div class="gal-card">
+      <img src="~/images/instalaciones/exterior.jpg" alt="Área exterior">
+      <div class="gal-info"><h3>Área Exterior</h3></div>
+    </div>
+    <div class="gal-card">
+      <img src="~/images/instalaciones/relax.jpg" alt="Zona relax">
+      <div class="gal-info"><h3>Zona Relax</h3></div>
+    </div>
+    <div class="gal-card gal-vertical">
+      <img src="~/images/instalaciones/entrenamiento.jpg" alt="Entrenamiento">
+      <div class="gal-info"><h3>Entrenamiento</h3></div>
+    </div>
+    <div class="gal-card gal-vertical">
+      <img src="~/images/instalaciones/agilidad.jpg" alt="Agilidad">
+      <div class="gal-info"><h3>Agilidad</h3></div>
+    </div>
+    <div class="gal-card gal-grande">
+      <img src="~/images/instalaciones/social.jpg" alt="Ambiente social">
+      <div class="gal-info"><h3>Ambiente Social</h3></div>
+    </div>
+    <div class="gal-card gal-grande">
+      <img src="~/images/instalaciones/park.jpg" alt="Indoor Dog Park">
+      <div class="gal-info"><h3>Indoor Dog Park</h3></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CÁMARAS ════════════════════════════════════════════ -->
+<section class="sec camaras-sec" id="camaras">
+  <div class="sec-label">Tecnología y seguridad</div>
+  <h2 class="sec-title">Monitoreo en <span>tiempo real</span></h2>
+  <div class="cam-grid">
+    <div class="cam-card">
+      <img src="~/images/camaras/camara1.jpg" alt="Cámaras en vivo">
+      <div class="cam-card-body"><h3>Cámaras en Vivo</h3><p>Observa a tu mascota desde cualquier lugar con un enlace exclusivo por reserva.</p></div>
+    </div>
+    <div class="cam-card">
+      <img src="~/images/camaras/camara2.jpg" alt="Pet Camera">
+      <div class="cam-card-body"><h3>Pet Camera</h3><p>Tecnología inteligente para interactuar y hacer seguimiento de tu mascota.</p></div>
+    </div>
+    <div class="cam-card">
+      <img src="~/images/camaras/camara3.jpg" alt="Monitoreo Inteligente">
+      <div class="cam-card-body"><h3>Monitoreo Inteligente</h3><p>Métricas de actividad, temperatura y alimentación actualizadas en tiempo real.</p></div>
+    </div>
+    <div class="cam-card">
+      <img src="~/images/camaras/camara4.jpg" alt="Seguridad 24/7">
+      <div class="cam-card-body"><h3>Seguridad 24/7</h3><p>Vigilancia permanente en todas las áreas de nuestras instalaciones.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SLIDER ════════════════════════════════════════════ -->
+<section class="slider-sec" id="momentos">
+  <div class="sec-label">Momentos felices</div>
+  <h2 class="sec-title">Experiencias <span>inolvidables</span></h2>
+  <div class="slider-wrap">
+    <div class="slide-track">
+      <img src="~/images/instalaciones/juegos.jpg" alt=""><img src="~/images/instalaciones/exterior.jpg" alt="">
+      <img src="~/images/instalaciones/relax.jpg" alt=""><img src="~/images/instalaciones/entrenamiento.jpg" alt="">
+      <img src="~/images/instalaciones/agilidad.jpg" alt=""><img src="~/images/instalaciones/social.jpg" alt="">
+      <img src="~/images/instalaciones/park.jpg" alt=""><img src="~/images/instalaciones/hero.png" alt="">
+      <img src="~/images/instalaciones/perro2.png" alt=""><img src="~/images/instalaciones/perro3.png" alt="">
+      <img src="~/images/instalaciones/perro4.png" alt="">
+      <!-- Duplicadas para loop -->
+      <img src="~/images/instalaciones/juegos.jpg" alt=""><img src="~/images/instalaciones/exterior.jpg" alt="">
+      <img src="~/images/instalaciones/relax.jpg" alt=""><img src="~/images/instalaciones/entrenamiento.jpg" alt="">
+      <img src="~/images/instalaciones/agilidad.jpg" alt=""><img src="~/images/instalaciones/social.jpg" alt="">
+      <img src="~/images/instalaciones/park.jpg" alt=""><img src="~/images/instalaciones/hero.png" alt="">
+      <img src="~/images/instalaciones/perro2.png" alt=""><img src="~/images/instalaciones/perro3.png" alt="">
+      <img src="~/images/instalaciones/perro4.png" alt="">
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICIOS ══════════════════════════════════════════ -->
+<section class="sec precios-sec" id="servicios">
+  <div class="sec-label">Lo que ofrecemos</div>
+  <h2 class="sec-title">Servicios para <span>tu mascota</span></h2>
+  <div class="precios-grid">
+    @foreach (var s in servicios)
+    {
+      var esEstadia = s.NombreServicio.Contains("Estadia", StringComparison.OrdinalIgnoreCase)
+                   || s.NombreServicio.Contains("express", StringComparison.OrdinalIgnoreCase);
+      var icon = s.NombreServicio.ToLower() switch {
+        var n when n.Contains("paseo")                       => "🦮",
+        var n when n.Contains("bano")||n.Contains("peluq")  => "🛁",
+        var n when n.Contains("vet")                        => "🩺",
+        var n when n.Contains("entren")                     => "🎾",
+        var n when n.Contains("express")                    => "⚡",
+        _                                                   => "🏠"
+      };
+      <div class="precio-card">
+        <div class="precio-icon">@icon</div>
+        <div class="precio-nombre">@s.NombreServicio</div>
+        <div class="precio-desc">@s.Descripcion</div>
+        <div class="precio-valor">$@s.PrecioBase.ToString("N0")</div>
+        <div class="precio-unidad">@(esEstadia ? "por día" : "por visita")</div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ══ NOSOTROS ═══════════════════════════════════════════ -->
+<section class="sec nosotros-sec" id="nosotros">
+  <div class="nosotros-inner">
+    <div class="nosotros-img">
+      <img src="~/images/instalaciones/exterior.jpg" alt="Cuidado profesional VacanJef">
+    </div>
+    <div class="nosotros-text">
+      <div class="sec-label">Quiénes somos</div>
+      <h2 class="sec-title">Cuidado profesional<br><span>con tecnología</span></h2>
+      <p>Somos el primer club canino en Medellín que combina atención especializada con monitoreo en tiempo real, para que nunca tengas que preocuparte por el bienestar de tu mascota.</p>
+      <div class="checks">
+        <div class="chk"><span class="chk-dot">✓</span>Instalaciones amplias, seguras y climatizadas</div>
+        <div class="chk"><span class="chk-dot">✓</span>Cuidadores certificados y con experiencia comprobada</div>
+        <div class="chk"><span class="chk-dot">✓</span>Dieta y medicamentos personalizados por mascota</div>
+        <div class="chk"><span class="chk-dot">✓</span>Sistema de reservas online disponible 24/7</div>
+        <div class="chk"><span class="chk-dot">✓</span>Facturación digital con múltiples métodos de pago</div>
+        <div class="chk"><span class="chk-dot">✓</span>Monitoreo con cámaras en vivo por enlace exclusivo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ════════════════════════════════════════════════ -->
+<section class="cta-sec" id="contacto">
+  <h2>¿Listo para reservar?</h2>
+  <p>Contáctanos y agenda hoy la estadía de tu mascota</p>
+  <div class="cta-contact">
+    <div><div class="cta-c-lbl">WhatsApp</div><div class="cta-c-val">300 000 0000</div></div>
+    <div><div class="cta-c-lbl">Correo</div><div class="cta-c-val">contacto@vacanjef.com</div></div>
+    <div><div class="cta-c-lbl">Horario</div><div class="cta-c-val">Lun – Sáb · 7am – 7pm</div></div>
+    <div><div class="cta-c-lbl">Sede</div><div class="cta-c-val">Medellín, Colombia</div></div>
+  </div>
+  @if (!estaAutenticado)
+  {
+    <a class="hero-btn" href="@Url.Action("Login","Cuenta")" style="position:relative;">
+      Ingresar al sistema →
+    </a>
+  }
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════ -->
+<footer class="home-footer">
+  <img src="~/images/logo.png" alt="Club Canino VacanJef">
+  <h2>🐾 Club Canino VacanJef</h2>
+  <p>Cuidado profesional, diversión y mucho amor · Medellín, Colombia</p>
+  <div class="social-links">
+    <a class="social-btn" href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a class="social-btn" href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+    <a class="social-btn" href="https://wa.me/573000000000" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+  </div>
+</footer>
+
+</div>
+
+@section Styles {
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+}

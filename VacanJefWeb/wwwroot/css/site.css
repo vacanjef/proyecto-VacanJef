@@ -1,0 +1,114 @@
+:root {
+  --sol: #F5A623;
+  --sol-claro: #FFD166;
+  --sol-oscuro: #C47A0A;
+  --arena: #FDF0D5;
+  --arena-2: #F5E2B0;
+  --arena-borde: #DFC08A;
+  --tierra: #7B4A1E;
+  --tierra-claro: #A0622A;
+  --cacao: #2C1503;
+  --crema: #FFFCF5;
+  --muted: #8C6B45;
+  --mar: #2B6CB0;
+  --error: #C0392B;
+  --exito: #276749;
+  --transition: all 0.2s ease;
+}
+
+* , *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: "Nunito", sans-serif;
+  background: var(--arena);
+  color: var(--cacao);
+  margin: 0;
+}
+
+a { color: var(--tierra); }
+
+.navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, var(--cacao) 0%, #1A0C02 100%);
+  padding: 0.9rem 1.75rem;
+  color: var(--arena);
+}
+.navbar .brand { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--sol-claro); text-decoration: none; }
+.navbar nav { display: flex; gap: 1.4rem; align-items: center; }
+.navbar nav a { color: rgba(253,240,213,0.8); text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+.navbar nav a:hover { color: var(--sol-claro); }
+.navbar .user-pill { background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.3); border-radius: 20px; padding: 0.35rem 0.9rem; font-size: 0.8rem; font-weight: 700; color: var(--sol-claro); }
+.navbar form { display: inline; }
+.navbar button.logout { background: none; border: none; color: rgba(253,240,213,0.6); cursor: pointer; font-weight: 700; font-size: 0.85rem; }
+.navbar button.logout:hover { color: var(--error); }
+
+.page { max-width: 1200px; margin: 0 auto; padding: 1.75rem; }
+.full-width-page { width: 100%; padding: 0; margin: 0; }
+.page h1 { font-family: "Syne", sans-serif; font-weight: 800; color: var(--cacao); font-size: 1.6rem; margin: 0 0 0.3rem; }
+.page .subtitle { color: var(--muted); font-weight: 600; margin: 0 0 1.5rem; font-size: 0.92rem; }
+
+.card {
+  background: var(--crema);
+  border: 1px solid var(--arena-borde);
+  border-radius: 14px;
+  padding: 1.4rem;
+  box-shadow: 0 6px 20px rgba(123,74,30,0.06);
+  margin-bottom: 1.25rem;
+}
+.card h2 { font-family: "Syne", sans-serif; font-size: 1.05rem; margin: 0 0 0.85rem; color: var(--tierra); }
+
+.grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap: 1rem; }
+.stat { background: var(--crema); border: 1px solid var(--arena-borde); border-radius: 14px; padding: 1.1rem; }
+.stat .num { font-family: "Syne", sans-serif; font-size: 1.7rem; font-weight: 800; color: var(--sol-oscuro); }
+.stat .label { font-size: 0.78rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+table.data th { text-align: left; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); padding: 0.6rem 0.7rem; border-bottom: 2px solid var(--arena-borde); }
+table.data td { padding: 0.65rem 0.7rem; border-bottom: 1px solid var(--arena-2); }
+table.data tr:hover td { background: rgba(245,166,35,0.06); }
+
+.badge { display: inline-block; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; }
+.badge-Pendiente { background: rgba(245,166,35,0.18); color: var(--sol-oscuro); }
+.badge-Confirmada { background: rgba(43,108,176,0.15); color: var(--mar); }
+.badge-EnCurso, .badge-EnCurso\.\.\. { background: rgba(245,166,35,0.3); color: var(--cacao); }
+.badge-Finalizada { background: rgba(39,103,73,0.15); color: var(--exito); }
+.badge-Cancelada, .badge-Anulado { background: rgba(192,57,43,0.13); color: var(--error); }
+.badge-Pagado { background: rgba(39,103,73,0.15); color: var(--exito); }
+.badge-SinCancelar { background: rgba(192,57,43,0.13); color: var(--error); }
+
+.btn { display: inline-flex; align-items: center; gap: 0.4rem; border: none; border-radius: 11px; padding: 0.6rem 1.2rem; font-weight: 800; font-size: 0.86rem; cursor: pointer; text-decoration: none; transition: var(--transition); }
+.btn-primary { background: linear-gradient(135deg, var(--sol-claro), var(--sol)); color: var(--cacao); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(245,166,35,0.35); }
+.btn-secondary { background: var(--arena-2); color: var(--tierra); border: 1px solid var(--arena-borde); }
+.btn-secondary:hover { background: var(--arena-borde); }
+.btn-sm { padding: 0.35rem 0.8rem; font-size: 0.78rem; border-radius: 9px; }
+
+.field-group { margin-bottom: 1.1rem; }
+.field-label { display: block; font-size: 0.78rem; font-weight: 800; color: var(--tierra); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.field-input, select.field-input, textarea.field-input {
+  width: 100%; min-height: 46px; padding: 0 14px; border: 1.5px solid var(--arena-borde); border-radius: 12px;
+  font-family: "Nunito", sans-serif; font-size: 0.9rem; color: var(--cacao); background: var(--crema);
+}
+textarea.field-input { padding: 10px 14px; }
+.field-input:focus { outline: none; border-color: var(--sol); box-shadow: 0 0 0 3px rgba(245,166,35,0.18); }
+.field-error { color: var(--error); font-size: 0.78rem; font-weight: 700; margin-top: 0.3rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+
+.alert { border-radius: 12px; padding: 0.8rem 1rem; font-weight: 700; font-size: 0.86rem; margin-bottom: 1.2rem; }
+.alert-success { background: rgba(39,103,73,0.12); color: var(--exito); border: 1px solid rgba(39,103,73,0.25); }
+.alert-error { background: rgba(192,57,43,0.1); color: var(--error); border: 1px solid rgba(192,57,43,0.25); }
+
+.empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--muted); }
+
+.monitor-card { display: flex; gap: 1rem; align-items: center; }
+.monitor-feed { width: 110px; height: 78px; border-radius: 10px; background: linear-gradient(135deg, #2C1503, #0F0702); display: flex; align-items: center; justify-content: center; color: var(--sol-claro); font-size: 1.6rem; flex-shrink: 0; position: relative; }
+.monitor-feed::after { content: "● EN VIVO"; position: absolute; bottom: 4px; left: 6px; font-size: 0.55rem; color: #ff6b6b; font-weight: 800; }
+.monitor-metrics { display: flex; gap: 1.1rem; font-size: 0.78rem; color: var(--muted); font-weight: 700; }
+.monitor-metrics b { color: var(--cacao); font-size: 0.95rem; display: block; }
+
+/* ── Logotipo (ícono + wordmark) reutilizable ───────── */
+.vj-logo-lockup { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.vj-logo-word { font-family: "Syne", sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--cacao); letter-spacing: 0.01em; }
+.vj-logo-word.claro { color: var(--arena); }
+

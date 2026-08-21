@@ -1,0 +1,235 @@
+@model List<VacanJefWeb.Models.Reserva>
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Cámaras en vivo";
+    var accesos = (Dictionary<int,string>)(ViewBag.Accesos ?? new Dictionary<int,string>());
+    var esAdmin = User.IsInRole(VacanJefWeb.Models.RolUsuario.Administrador)
+               || User.IsInRole(VacanJefWeb.Models.RolUsuario.Empleado);
+    var backUrl = User.IsInRole(VacanJefWeb.Models.RolUsuario.Administrador)
+                    ? Url.Action("Admin","Dashboard")
+                    : User.IsInRole(VacanJefWeb.Models.RolUsuario.Empleado)
+                        ? Url.Action("Empleado","Dashboard")
+                        : Url.Action("Cliente","Dashboard");
+}
+
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap;">
+    <a href="@backUrl" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;
+       border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);
+       font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">← Regresar</a>
+    <div>
+        <h1 style="margin:0;font-family:'Syne',sans-serif;font-size:1.5rem;color:var(--cacao);">
+            📷 Cámaras en vivo
+        </h1>
+        <p style="margin:0;font-size:0.82rem;color:var(--muted);font-weight:600;">
+            Estadías activas — @Model.Count mascota(s) en instalaciones ahora mismo
+        </p>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card">
+        <div class="empty-state" style="padding:3rem 1rem;">
+            <div style="font-size:3rem;margin-bottom:0.8rem;">📷</div>
+            <div style="font-size:1rem;font-weight:700;color:var(--cacao);margin-bottom:0.3rem;">
+                No hay estadías activas en este momento
+            </div>
+            <div style="font-size:0.84rem;color:var(--muted);">
+                Las cámaras se activan automáticamente cuando se confirma una reserva.
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.1rem;">
+    @foreach (var r in Model)
+    {
+        var token   = accesos.ContainsKey(r.IdReserva) ? accesos[r.IdReserva] : null;
+        var camUrl  = token != null ? Url.Action("Ver","Camara",new{token}) : null;
+        var especie = r.Mascota?.Especie ?? "";
+        var emoji   = especie.Contains("Gato") ? "🐱"
+                    : especie.Contains("Ave")  ? "🦜"
+                    : especie.Contains("Conejo") ? "🐰" : "🐕";
+
+        <div style="background:#111;border:1px solid #222;border-radius:16px;overflow:hidden;
+                    box-shadow:0 4px 20px rgba(0,0,0,0.4);">
+
+            <!-- Mini feed oscuro -->
+            <div style="background:#0D1A0A;aspect-ratio:16/9;position:relative;display:flex;
+                        align-items:center;justify-content:center;overflow:hidden;cursor:@(camUrl!=null?"pointer":"default");"
+                 @(camUrl != null ? $"onclick=\"window.open('{camUrl}','_blank')\"" : "")>
+                <!-- Cuadrícula 2x2 pequeña -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;width:100%;height:100%;gap:1px;background:#000;">
+                    <div style="background:#0D1A0A;display:flex;align-items:center;justify-content:center;
+                                font-size:1.6rem;position:relative;">
+                        @emoji
+                        <div style="position:absolute;bottom:3px;left:4px;font-size:7px;
+                                    font-family:monospace;color:rgba(255,255,255,0.4);">CAM-01</div>
+                        <div style="position:absolute;top:3px;right:4px;font-size:7px;
+                                    color:#EF4444;font-weight:700;font-family:monospace;
+                                    display:flex;align-items:center;gap:2px;">
+                            <span style="width:4px;height:4px;border-radius:50%;background:#EF4444;
+                                         display:inline-block;animation:bl 1s ease-in-out infinite;"></span>REC
+                        </div>
+                    </div>
+                    <div style="background:#0A0D1A;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🐾</div>
+                    <div style="background:#0D0A0A;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🌿</div>
+                    <div style="background:#0A0A15;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🛁</div>
+                </div>
+                <!-- Overlay -->
+                <div style="position:absolute;inset:0;background:repeating-linear-gradient(
+                    0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px);
+                    pointer-events:none;"></div>
+                @if (token != null)
+                {
+                    <div style="position:absolute;inset:0;background:rgba(0,0,0,0);
+                                display:flex;align-items:center;justify-content:center;
+                                opacity:0;transition:opacity 0.2s;pointer-events:none;"
+                         class="cam-hover-overlay">
+                        <span style="font-size:2rem;">▶</span>
+                    </div>
+                }
+            </div>
+
+            <!-- Info -->
+            <div style="padding:0.9rem 1rem;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">
+                    <div>
+                        <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;
+                                    color:#FFD166;margin-bottom:1px;">
+                            @emoji @r.Mascota?.Nombre
+                        </div>
+                        <div style="font-size:0.74rem;color:#5A4A30;font-weight:600;">
+                            @r.Mascota?.Especie · @(r.Mascota?.Raza ?? "—")
+                        </div>
+                        @if (esAdmin)
+                        {
+                            <div style="font-size:0.72rem;color:#3A2A10;margin-top:2px;">
+                                Dueño: @r.Cliente?.Nombre @r.Cliente?.Apellido
+                            </div>
+                        }
+                    </div>
+                    <span style="padding:3px 10px;border-radius:20px;font-size:0.68rem;font-weight:800;
+                                 background:@(r.EstadoReserva=="En curso"?"rgba(39,103,73,0.2)":"rgba(43,108,176,0.2)");
+                                 color:@(r.EstadoReserva=="En curso"?"#4ADE80":"#93C5FD");">
+                        @r.EstadoReserva
+                    </span>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;font-size:0.74rem;
+                            color:#3A2A10;margin-bottom:0.75rem;flex-wrap:wrap;gap:4px;">
+                    <span>Ingreso: @r.FechaInicio.ToString("dd/MM/yyyy")</span>
+                    <span>Salida: @(r.FechaFin?.ToString("dd/MM/yyyy") ?? "—")</span>
+                    @if (r.Empleado != null)
+                    {
+                        <span>Cuidador: @r.Empleado.Nombre</span>
+                    }
+                </div>
+
+                <!-- Métricas SignalR -->
+                <div class="cam-metrics-row" data-reserva="@r.IdReserva"
+                     style="display:flex;gap:0.6rem;margin-bottom:0.75rem;">
+                    <div style="flex:1;background:#161616;border:1px solid #1E1E1E;border-radius:8px;
+                                padding:6px 8px;text-align:center;">
+                        <div style="font-size:9px;color:#3A2A10;font-weight:700;text-transform:uppercase;">Actividad</div>
+                        <div class="js-act" style="font-size:0.95rem;font-weight:800;color:#F5A623;font-family:monospace;">—</div>
+                    </div>
+                    <div style="flex:1;background:#161616;border:1px solid #1E1E1E;border-radius:8px;
+                                padding:6px 8px;text-align:center;">
+                        <div style="font-size:9px;color:#3A2A10;font-weight:700;text-transform:uppercase;">Temp.</div>
+                        <div class="js-temp" style="font-size:0.95rem;font-weight:800;color:#F5A623;font-family:monospace;">—</div>
+                    </div>
+                    <div style="flex:1;background:#161616;border:1px solid #1E1E1E;border-radius:8px;
+                                padding:6px 8px;text-align:center;">
+                        <div style="font-size:9px;color:#3A2A10;font-weight:700;text-transform:uppercase;">Comida</div>
+                        <div class="js-comida" style="font-size:0.95rem;font-weight:800;color:#F5A623;font-family:monospace;">—</div>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                @if (token != null)
+                {
+                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                        <a href="@camUrl" target="_blank"
+                           style="flex:1;display:flex;align-items:center;justify-content:center;gap:5px;
+                                  padding:0.55rem;border-radius:9px;background:linear-gradient(135deg,#1A3A1A,#0A2A0A);
+                                  color:#4ADE80;border:1px solid #2A5A2A;text-decoration:none;
+                                  font-size:0.8rem;font-weight:800;font-family:'Nunito',sans-serif;">
+                            📺 Abrir cámaras
+                        </a>
+                        <a href="https://wa.me/?text=@Uri.EscapeDataString($"Accede a las cámaras para ver a {r.Mascota?.Nombre} en VacanJef: {Context.Request.Scheme}://{Context.Request.Host}/camara/{token}")"
+                           target="_blank"
+                           style="display:flex;align-items:center;justify-content:center;gap:5px;
+                                  padding:0.55rem 0.75rem;border-radius:9px;background:#1A3A1A;
+                                  color:#4ADE80;border:1px solid #2A5A2A;text-decoration:none;
+                                  font-size:0.85rem;font-weight:800;">
+                            💬
+                        </a>
+                        <button onclick="copiarCam('@($"{Context.Request.Scheme}://{Context.Request.Host}/camara/{token}")',this)"
+                                style="display:flex;align-items:center;justify-content:center;
+                                       padding:0.55rem 0.75rem;border-radius:9px;background:#1A1A2A;
+                                       color:#93C5FD;border:1px solid #2A2A4A;font-size:0.85rem;
+                                       font-weight:800;cursor:pointer;">
+                            🔗
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div style="background:#1A1A0A;border:1px dashed #2A2A1A;border-radius:9px;
+                                padding:0.6rem;text-align:center;font-size:0.78rem;color:#3A3A10;font-weight:700;">
+                        ⚠️ Sin token de acceso —
+                        @if (esAdmin)
+                        {
+                            <a href="@Url.Action("Index","Reservas")" style="color:#F5A623;">
+                                confirma la reserva en Reservas
+                            </a>
+                        }
+                        else
+                        {
+                            <span>el administrador generará el enlace al confirmar</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    </div>
+}
+
+<style>
+  @@keyframes bl { 0%,100%{opacity:1}50%{opacity:.3} }
+</style>
+
+@section Scripts {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+<script>
+function copiarCam(url, btn) {
+    navigator.clipboard.writeText(url).then(() => {
+        btn.textContent = '✅';
+        setTimeout(() => btn.textContent = '🔗', 2500);
+    });
+}
+
+// SignalR: actualizar métricas en cada tarjeta
+const conn = new signalR.HubConnectionBuilder()
+    .withUrl('/hubs/monitoreo')
+    .withAutomaticReconnect()
+    .build();
+
+conn.on('metricaActualizada', m => {
+    const card = document.querySelector(`.cam-metrics-row[data-reserva="${m.idReserva}"]`);
+    if (!card) return;
+    card.querySelector('.js-act').textContent    = m.nivelActividad + '%';
+    card.querySelector('.js-temp').textContent   = m.temperaturaC + '°C';
+    card.querySelector('.js-comida').textContent = m.ultimaComida;
+});
+
+conn.start().then(() => {
+    document.querySelectorAll('.cam-metrics-row[data-reserva]').forEach(el => {
+        conn.invoke('UnirseAReserva', parseInt(el.dataset.reserva, 10));
+    });
+}).catch(err => console.warn('SignalR:', err));
+</script>
+}

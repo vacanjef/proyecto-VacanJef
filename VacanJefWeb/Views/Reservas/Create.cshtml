@@ -1,0 +1,149 @@
+@model ReservaFormViewModel
+@{
+    ViewData["Title"] = "Nueva reserva";
+    var esStaff = !User.IsInRole(RolUsuario.Cliente);
+}
+
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+  <a href="@(Url.Action("Index"))" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">← Regresar</a>
+  <h1 style="margin:0;">Nueva reserva</h1>
+</div>
+<p class="subtitle">@(esStaff ? "Registra una reserva en nombre de un cliente" : "Reserva una estadía o un paseo para tu mascota")</p>
+
+<div class="card" style="max-width:600px;">
+  @if (!ViewData.ModelState.IsValid)
+  {
+    <div class="alert alert-error">@Html.ValidationSummary(false)</div>
+  }
+
+  @if (!esStaff && !Model.MascotasDisponibles.Any())
+  {
+    <div class="empty-state">Necesitas registrar al menos una mascota antes de reservar. <a href="@Url.Action("Create","Mascotas")">Registrar mascota</a>.</div>
+  }
+  else
+  {
+    <form method="post" asp-action="Create">
+      @Html.AntiForgeryToken()
+
+      @if (esStaff)
+      {
+        <div class="field-group">
+          <label class="field-label" asp-for="IdClienteSeleccionado">Cliente</label>
+          <select class="field-input" id="idCliente" asp-for="IdClienteSeleccionado">
+            <option value="">-- Selecciona el cliente --</option>
+            @foreach (var c in Model.ClientesDisponibles)
+            {
+              <option value="@c.IdCliente" selected="@(Model.IdClienteSeleccionado == c.IdCliente ? "selected" : null)">@c.NombreCompleto</option>
+            }
+          </select>
+          <span class="field-error" asp-validation-for="IdClienteSeleccionado"></span>
+        </div>
+      }
+
+      <div class="field-group">
+        <label class="field-label" asp-for="IdMascota">Mascota</label>
+        <select class="field-input" id="idMascota" asp-for="IdMascota" disabled="@(esStaff ? "disabled" : null)">
+          <option value="">@(esStaff ? "-- Primero selecciona un cliente --" : "-- Selecciona --")</option>
+          @foreach (var m in Model.MascotasDisponibles)
+          {
+            <option value="@m.IdMascota">@m.Nombre</option>
+          }
+        </select>
+        <span class="field-error" asp-validation-for="IdMascota"></span>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" asp-for="IdTipoServicio">Tipo de servicio</label>
+        <select class="field-input" id="idServicio" asp-for="IdTipoServicio">
+          <option value="">-- Selecciona --</option>
+          @foreach (var s in Model.ServiciosDisponibles)
+          {
+            <option value="@s.IdTipoServicio" data-precio="@s.PrecioBase">@s.NombreServicio (desde $@s.PrecioBase.ToString("N0"))</option>
+          }
+        </select>
+        <span class="field-error" asp-validation-for="IdTipoServicio"></span>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label" asp-for="FechaInicio">Fecha y hora de ingreso</label>
+          <input class="field-input" id="fechaInicio" asp-for="FechaInicio" type="datetime-local">
+          <span class="field-error" asp-validation-for="FechaInicio"></span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" asp-for="FechaFin">Fecha y hora de salida (opcional)</label>
+          <input class="field-input" id="fechaFin" asp-for="FechaFin" type="datetime-local">
+          <span class="field-error" asp-validation-for="FechaFin"></span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" asp-for="Observaciones">Observaciones</label>
+        <textarea class="field-input" asp-for="Observaciones" rows="2" placeholder="Indicaciones especiales para el cuidador"></textarea>
+      </div>
+
+      <div id="costoEstimado" class="alert" style="background:var(--arena-2);color:var(--tierra);display:none;"></div>
+
+      <button type="submit" class="btn btn-primary">@(esStaff ? "Registrar reserva" : "Confirmar reserva")</button>
+    </form>
+  }
+</div>
+
+@section Scripts {
+<script>
+  function actualizarCosto() {
+    const sel = document.getElementById('idServicio');
+    const opt = sel.options[sel.selectedIndex];
+    const precio = parseFloat(opt?.dataset.precio || '0');
+    const ini = document.getElementById('fechaInicio').value;
+    const fin = document.getElementById('fechaFin').value;
+    const caja = document.getElementById('costoEstimado');
+    if (!precio) { caja.style.display = 'none'; return; }
+
+    const esEstadia = (opt.textContent || '').toLowerCase().includes('estadia');
+    let dias = 1;
+    if (esEstadia && ini && fin) {
+      const ms = new Date(fin) - new Date(ini);
+      dias = Math.max(1, Math.ceil(ms / 86400000));
+    }
+    const total = esEstadia ? precio * dias : precio;
+    caja.style.display = 'block';
+    caja.textContent = `Costo estimado: $${total.toLocaleString('es-CO')}` + (esEstadia ? ` (${dias} día(s))` : '');
+  }
+  ['idServicio','fechaInicio','fechaFin'].forEach(id =>
+    document.getElementById(id)?.addEventListener('change', actualizarCosto));
+
+  // Carga dinámica de mascotas al cambiar de cliente (solo Admin/Empleado)
+  const selCliente = document.getElementById('idCliente');
+  const selMascota = document.getElementById('idMascota');
+  if (selCliente && selMascota) {
+    selCliente.addEventListener('change', async function () {
+      const idCliente = this.value;
+      selMascota.innerHTML = '<option value="">Cargando...</option>';
+      selMascota.disabled = true;
+      if (!idCliente) {
+        selMascota.innerHTML = '<option value="">-- Primero selecciona un cliente --</option>';
+        return;
+      }
+      try {
+        const res = await fetch(`@Url.Action("MascotasPorCliente")?idCliente=${idCliente}`);
+        const data = await res.json();
+        selMascota.innerHTML = '<option value="">-- Selecciona --</option>';
+        if (data.length === 0) {
+          selMascota.innerHTML = '<option value="">Este cliente no tiene mascotas registradas</option>';
+        } else {
+          data.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m.id;
+            opt.textContent = m.nombre;
+            selMascota.appendChild(opt);
+          });
+          selMascota.disabled = false;
+        }
+      } catch (err) {
+        selMascota.innerHTML = '<option value="">Error al cargar mascotas</option>';
+      }
+    });
+  }
+</script>
+}

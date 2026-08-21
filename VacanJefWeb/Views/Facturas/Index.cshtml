@@ -1,0 +1,73 @@
+@model IEnumerable<Factura>
+@{ ViewData["Title"] = "Facturas"; }
+@{ var puedeGestionar = User.IsInRole(RolUsuario.Administrador) || User.IsInRole(RolUsuario.Empleado); }
+@{ var metodos = ViewBag.MetodosPago as List<MetodoPago> ?? new(); }
+@{
+    var backUrl = User.IsInRole(RolUsuario.Administrador) ? Url.Action("Admin","Dashboard")
+                : User.IsInRole(RolUsuario.Empleado)      ? Url.Action("Empleado","Dashboard")
+                : Url.Action("Cliente","Dashboard");
+}
+
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+  <a href="@backUrl" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">← Regresar</a>
+  <div>
+    <h1 style="margin:0;">Facturas</h1>
+    <p class="subtitle" style="margin:0;">@(User.IsInRole(RolUsuario.Cliente) ? "Tu historial de pagos — solo tus servicios" : "Facturación de todas las reservas")</p>
+  </div>
+</div>
+
+<div class="card">
+  @if (!Model.Any())
+  {
+    <div class="empty-state">No hay facturas todavía. Se generan desde una reserva finalizada.</div>
+  }
+  else
+  {
+    <table class="data">
+      <thead>
+        <tr>
+          <th>#</th>
+          @if (!User.IsInRole(RolUsuario.Cliente)) { <th>Cliente</th> }
+          <th>Mascota</th><th>Servicio</th><th>Emisión</th><th>Total</th><th>Estado</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+      @foreach (var f in Model)
+      {
+        <tr>
+          <td style="font-family:monospace;font-size:0.78rem;color:var(--muted);">#@f.IdFactura</td>
+          @if (!User.IsInRole(RolUsuario.Cliente)) { <td>@f.Cliente?.Nombre @f.Cliente?.Apellido</td> }
+          <td>@f.Reserva?.Mascota?.Nombre</td>
+          <td>@f.Reserva?.TipoServicio?.NombreServicio</td>
+          <td>@f.FechaEmision.ToString("dd/MM/yyyy")</td>
+          <td><strong>$@f.Total.ToString("N0")</strong></td>
+          <td><span class="badge badge-@f.EstadoPago.Replace(" ", "")">@f.EstadoPago</span></td>
+          <td style="white-space:nowrap;">
+            <a class="btn btn-secondary btn-sm" href="@Url.Action("Details", new { id = f.IdFactura })">🧾 Ver recibo</a>
+            @if (puedeGestionar && f.EstadoPago != EstadoPago.Pagado)
+            {
+              <details style="display:inline-block;position:relative;">
+                <summary class="btn btn-secondary btn-sm" style="cursor:pointer;display:inline-flex;">💰 Marcar pagada</summary>
+                <form method="post" asp-action="MarcarPagada"
+                      style="position:absolute;top:100%;right:0;z-index:20;margin-top:4px;background:var(--crema);
+                             border:1px solid var(--arena-borde);border-radius:10px;padding:0.6rem;
+                             display:flex;gap:0.4rem;box-shadow:0 6px 18px rgba(0,0,0,0.12);white-space:nowrap;">
+                  @Html.AntiForgeryToken()
+                  <input type="hidden" name="id" value="@f.IdFactura" />
+                  <select name="idMetodoPago" class="field-input btn-sm" style="min-height:32px;padding:0 8px;">
+                    @foreach (var m in metodos)
+                    {
+                      <option value="@m.IdMetodoPago">@m.NombreMetodo</option>
+                    }
+                  </select>
+                  <button class="btn btn-primary btn-sm" type="submit">Confirmar</button>
+                </form>
+              </details>
+            }
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+</div>

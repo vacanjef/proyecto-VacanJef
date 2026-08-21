@@ -1,0 +1,220 @@
+@model VacanJefWeb.Models.ViewModels.ReportesViewModel
+@{
+    ViewData["Title"] = "Dashboard — Reportes";
+    var meses    = (string)(ViewBag.Meses    ?? "[]");
+    var resData  = (string)(ViewBag.Reservas ?? "[]");
+    var ingData  = (string)(ViewBag.Ingresos ?? "[]");
+    var estados  = (string)(ViewBag.Estados  ?? "[]");
+}
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.8rem;">
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <a href="@Url.Action("Admin","Dashboard")"
+       style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;
+              border:1.5px solid var(--arena-borde);border-radius:10px;
+              background:var(--crema);font-weight:800;font-size:0.84rem;
+              color:var(--tierra);text-decoration:none;">← Regresar</a>
+    <div>
+      <h1 style="margin:0;font-family:'Syne',sans-serif;font-size:1.5rem;color:var(--cacao);">📊 Dashboard</h1>
+      <p style="margin:0;font-size:0.82rem;color:var(--muted);font-weight:600;">Reportes y estadísticas de VacanJef</p>
+    </div>
+  </div>
+  <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+    <button onclick="exportarExcel()" class="btn btn-secondary"
+            style="display:inline-flex;align-items:center;gap:6px;">
+      📥 Exportar Excel
+    </button>
+    <button onclick="exportarPDF()" class="btn btn-primary"
+            style="display:inline-flex;align-items:center;gap:6px;">
+      📄 Exportar PDF
+    </button>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="grid-stats" style="margin-bottom:1.5rem;" id="kpis">
+  <div class="stat"><div class="num">@Model.ReservasPendientes</div><div class="label">Pendientes</div></div>
+  <div class="stat"><div class="num">@Model.ReservasConfirmadas</div><div class="label">Confirmadas</div></div>
+  <div class="stat"><div class="num">@Model.ReservasEnCurso</div><div class="label">En curso</div></div>
+  <div class="stat"><div class="num">@Model.ReservasFinalizadas</div><div class="label">Finalizadas</div></div>
+  <div class="stat"><div class="num">@Model.TotalMascotasActivas</div><div class="label">Mascotas</div></div>
+  <div class="stat"><div class="num">@Model.TotalClientesActivos</div><div class="label">Clientes</div></div>
+  <div class="stat"><div class="num" style="font-size:1.2rem;">$@Model.IngresosPagados.ToString("N0")</div><div class="label">Cobrado</div></div>
+  <div class="stat"><div class="num" style="font-size:1.2rem;color:var(--error);">$@Model.IngresosPendientes.ToString("N0")</div><div class="label">Por cobrar</div></div>
+</div>
+
+<!-- Gráficas -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;" id="graficas">
+  <div class="card">
+    <h2 style="font-size:0.85rem;margin-bottom:1rem;">📊 Reservas por mes (últimos 6 meses)</h2>
+    <canvas id="chartReservas" height="160"></canvas>
+  </div>
+  <div class="card">
+    <h2 style="font-size:0.85rem;margin-bottom:1rem;">💰 Ingresos cobrados (últimos 6 meses)</h2>
+    <canvas id="chartIngresos" height="160"></canvas>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 2fr;gap:1.2rem;" id="graficas2">
+  <div class="card" style="display:flex;flex-direction:column;align-items:center;">
+    <h2 style="font-size:0.85rem;margin-bottom:1rem;width:100%;">🍩 Estado de reservas</h2>
+    <canvas id="chartDona" width="200" height="200"></canvas>
+    <div style="margin-top:1rem;font-size:0.78rem;color:var(--muted);width:100%;line-height:2;">
+      <span style="color:#F5A623;">●</span> Pendiente: @Model.ReservasPendientes &nbsp;
+      <span style="color:#93C5FD;">●</span> Confirmada: @Model.ReservasConfirmadas<br>
+      <span style="color:#4ADE80;">●</span> En curso: @Model.ReservasEnCurso &nbsp;
+      <span style="color:#C47A0A;">●</span> Finalizada: @Model.ReservasFinalizadas<br>
+      <span style="color:#F87171;">●</span> Cancelada: @Model.ReservasCanceladas
+    </div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:0.85rem;margin-bottom:1rem;">📈 Ingresos vs Por cobrar</h2>
+    <canvas id="chartComparativo" height="200"></canvas>
+  </div>
+</div>
+
+@section Scripts {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const meses   = @Html.Raw(meses);
+const resData  = @Html.Raw(resData);
+const ingData  = @Html.Raw(ingData);
+const estados  = @Html.Raw(estados);
+
+const dorado  = 'rgba(245,166,35,0.9)';
+const doradoB = 'rgba(245,166,35,0.15)';
+const verde   = 'rgba(39,103,73,0.9)';
+const verdeB  = 'rgba(39,103,73,0.15)';
+const optsGrid = {
+  responsive:true, plugins:{legend:{display:false}},
+  scales:{
+    x:{ticks:{color:'#8C6B45',font:{size:11}},grid:{color:'rgba(0,0,0,0.04)'}},
+    y:{ticks:{color:'#8C6B45',font:{size:11}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}
+  }
+};
+
+// Reservas por mes
+new Chart(document.getElementById('chartReservas'),{
+  type:'bar',
+  data:{labels:meses,datasets:[{data:resData,backgroundColor:doradoB,borderColor:dorado,borderWidth:2,borderRadius:8}]},
+  options:optsGrid
+});
+
+// Ingresos
+new Chart(document.getElementById('chartIngresos'),{
+  type:'line',
+  data:{labels:meses,datasets:[{
+    data:ingData.map(v=>Math.round(v/1000)),
+    borderColor:verde,backgroundColor:verdeB,
+    borderWidth:2.5,fill:true,tension:0.35,pointBackgroundColor:verde,pointRadius:5
+  }]},
+  options:{...optsGrid,scales:{
+    x:{ticks:{color:'#8C6B45',font:{size:11}},grid:{color:'rgba(0,0,0,0.04)'}},
+    y:{ticks:{color:'#8C6B45',font:{size:11},callback:v=>'$'+v+'k'},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}
+  }}
+});
+
+// Dona
+new Chart(document.getElementById('chartDona'),{
+  type:'doughnut',
+  data:{datasets:[{data:estados,
+    backgroundColor:['#F5A623','#93C5FD','#4ADE80','#C47A0A','#F87171'],
+    borderWidth:0,hoverOffset:6
+  }]},
+  options:{responsive:false,plugins:{legend:{display:false}},cutout:'62%'}
+});
+
+// Comparativo ingresos
+new Chart(document.getElementById('chartComparativo'),{
+  type:'bar',
+  data:{labels:['Cobrado','Por cobrar'],datasets:[{
+    data:[@Model.IngresosPagados, @Model.IngresosPendientes],
+    backgroundColor:['rgba(39,103,73,0.8)','rgba(192,57,43,0.7)'],
+    borderRadius:10,borderWidth:0
+  }]},
+  options:{...optsGrid,scales:{
+    x:{ticks:{color:'#8C6B45',font:{size:12}},grid:{color:'rgba(0,0,0,0.04)'}},
+    y:{ticks:{color:'#8C6B45',font:{size:11},callback:v=>'$'+Math.round(v/1000)+'k'},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}
+  }}
+});
+
+// ── Exportar a PDF ──────────────────────────────────────────
+function exportarPDF() {
+  const contenido = `
+    <html><head><meta charset="utf-8">
+    <style>
+      body{font-family:Arial,sans-serif;margin:20px;color:#2C1503;}
+      h1{color:#C47A0A;border-bottom:3px solid #F5A623;padding-bottom:8px;}
+      h2{color:#7B4A1E;font-size:14px;margin:20px 0 8px;}
+      table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+      th{background:#F5E2B0;color:#7B4A1E;padding:8px;text-align:left;font-size:12px;}
+      td{padding:7px 8px;border-bottom:1px solid #F5E2B0;font-size:12px;}
+      .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+      .stat-box{background:#FDF0D5;border:1px solid #DFC08A;border-radius:8px;padding:12px;text-align:center;}
+      .stat-num{font-size:22px;font-weight:bold;color:#C47A0A;}
+      .stat-lbl{font-size:11px;color:#8C6B45;text-transform:uppercase;}
+    </style></head><body>
+    <h1>📊 Dashboard VacanJef — Reporte</h1>
+    <p>Generado el: ${new Date().toLocaleDateString('es-CO', {day:'2-digit',month:'long',year:'numeric'})}</p>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-num">@Model.ReservasPendientes</div><div class="stat-lbl">Pendientes</div></div>
+      <div class="stat-box"><div class="stat-num">@Model.ReservasEnCurso</div><div class="stat-lbl">En curso</div></div>
+      <div class="stat-box"><div class="stat-num">@Model.TotalClientesActivos</div><div class="stat-lbl">Clientes</div></div>
+      <div class="stat-box"><div class="stat-num">$@((Model.IngresosPagados/1000).ToString("N0"))k</div><div class="stat-lbl">Cobrado</div></div>
+    </div>
+    <h2>Estado de reservas</h2>
+    <table>
+      <tr><th>Estado</th><th>Cantidad</th></tr>
+      <tr><td>Pendiente</td><td>@Model.ReservasPendientes</td></tr>
+      <tr><td>Confirmada</td><td>@Model.ReservasConfirmadas</td></tr>
+      <tr><td>En curso</td><td>@Model.ReservasEnCurso</td></tr>
+      <tr><td>Finalizada</td><td>@Model.ReservasFinalizadas</td></tr>
+      <tr><td>Cancelada</td><td>@Model.ReservasCanceladas</td></tr>
+    </table>
+    <h2>Resumen financiero</h2>
+    <table>
+      <tr><th>Concepto</th><th>Valor</th></tr>
+      <tr><td>Ingresos cobrados</td><td>$@Model.IngresosPagados.ToString("N0")</td></tr>
+      <tr><td>Por cobrar</td><td>$@Model.IngresosPendientes.ToString("N0")</td></tr>
+      <tr><td>Total mascotas activas</td><td>@Model.TotalMascotasActivas</td></tr>
+      <tr><td>Total clientes activos</td><td>@Model.TotalClientesActivos</td></tr>
+    </table>
+    </body></html>`;
+  const win = window.open('','_blank','width=900,height=700');
+  win.document.write(contenido);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>{ win.print(); win.close(); }, 600);
+}
+
+// ── Exportar a Excel (CSV) ─────────────────────────────────
+function exportarExcel() {
+  const bom = '\uFEFF';
+  let csv = bom + 'REPORTE VACANJEF\r\n';
+  csv += `Generado el,${new Date().toLocaleDateString('es-CO')}\r\n\r\n`;
+  csv += 'ESTADO DE RESERVAS\r\n';
+  csv += 'Estado,Cantidad\r\n';
+  csv += `Pendiente,@Model.ReservasPendientes\r\n`;
+  csv += `Confirmada,@Model.ReservasConfirmadas\r\n`;
+  csv += `En curso,@Model.ReservasEnCurso\r\n`;
+  csv += `Finalizada,@Model.ReservasFinalizadas\r\n`;
+  csv += `Cancelada,@Model.ReservasCanceladas\r\n\r\n`;
+  csv += 'RESUMEN FINANCIERO\r\n';
+  csv += 'Concepto,Valor\r\n';
+  csv += `Ingresos cobrados,$@Model.IngresosPagados.ToString("N0")\r\n`;
+  csv += `Por cobrar,$@Model.IngresosPendientes.ToString("N0")\r\n`;
+  csv += `Total mascotas activas,@Model.TotalMascotasActivas\r\n`;
+  csv += `Total clientes activos,@Model.TotalClientesActivos\r\n\r\n`;
+  csv += 'RESERVAS POR MES\r\nMes,Reservas\r\n';
+  meses.forEach((m,i) => { csv += `${m},${resData[i]}\r\n`; });
+  csv += '\r\nINGRESOS POR MES (miles)\r\nMes,Ingresos($k)\r\n';
+  meses.forEach((m,i) => { csv += `${m},${Math.round(ingData[i]/1000)}\r\n`; });
+
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `VacanJef_Dashboard_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+</script>
+}

@@ -1,0 +1,98 @@
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Panel administrador";
+    ViewData["BodyClass"] = "login-body";
+    ViewData["FullScreen"] = true;
+    Layout = "_Layout";
+    var nombre  = (string)(ViewBag.Nombre  ?? "Admin");
+    var cargo   = (string)(ViewBag.Cargo   ?? "Administrador");
+    var reportes = (VacanJefWeb.Models.ViewModels.ReportesViewModel)ViewBag.Reportes;
+}
+@section Styles { <link rel="stylesheet" href="~/css/login.css"> }
+
+<div class="bg-layer"></div>
+<div class="paws-bg" id="pawsBg"></div>
+
+<div class="wrapper">
+  <!-- Panel izquierdo -->
+  <div class="brand-panel">
+    <div class="carousel" id="carousel">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=900&q=80" alt="" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=900&q=80" alt="" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&q=80" alt="" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=80" alt="" loading="lazy"></div>
+      </div>
+      <div class="carousel-overlay"></div>
+    </div>
+    <div class="brand-content">
+      <div class="logo-wrap"><img class="logo-img" src="~/images/logo.png" alt="VacanJef"></div>
+      <div>
+        <div class="brand-features">
+          <div class="feature-item"><div class="feature-icon">📋</div><div>Gestión de reservas y hospedaje</div></div>
+          <div class="feature-item"><div class="feature-icon">🐕</div><div>Control de mascotas y clientes</div></div>
+          <div class="feature-item"><div class="feature-icon">📷</div><div>Monitoreo con cámaras en tiempo real</div></div>
+          <div class="feature-item"><div class="feature-icon">💳</div><div>Facturación y múltiples métodos de pago</div></div>
+        </div>
+        <div class="carousel-dots" id="carouselDots"></div>
+        <p class="brand-footer">© 2026 VacanJef · Medellín, Colombia</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel derecho: bienvenida limpia -->
+  <div class="welcome-panel">
+    <div class="role-badge-pill">🛡️ Administrador</div>
+    <h2 class="welcome-title">¡Hola, @nombre!</h2>
+    <p class="welcome-subtitle">@cargo · Administrador</p>
+
+    <!-- KPIs rápidos -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;width:100%;margin-bottom:1.2rem;">
+      <div style="background:rgba(245,166,35,0.08);border:1.5px solid rgba(245,166,35,0.25);border-radius:14px;padding:0.9rem;text-align:center;">
+        <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#C47A0A;">@reportes.ReservasEnCurso</div>
+        <div style="font-size:0.7rem;color:#8C6B45;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">En curso</div>
+      </div>
+      <div style="background:rgba(245,166,35,0.08);border:1.5px solid rgba(245,166,35,0.25);border-radius:14px;padding:0.9rem;text-align:center;">
+        <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#C47A0A;">@reportes.ReservasPendientes</div>
+        <div style="font-size:0.7rem;color:#8C6B45;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Pendientes</div>
+      </div>
+      <div style="background:rgba(245,166,35,0.08);border:1.5px solid rgba(245,166,35,0.25);border-radius:14px;padding:0.9rem;text-align:center;">
+        <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#C47A0A;">@reportes.TotalClientesActivos</div>
+        <div style="font-size:0.7rem;color:#8C6B45;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Clientes</div>
+      </div>
+      <div style="background:rgba(39,103,73,0.1);border:1.5px solid rgba(39,103,73,0.25);border-radius:14px;padding:0.9rem;text-align:center;">
+        <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#276749;">$@((reportes.IngresosPagados/1000).ToString("N0"))k</div>
+        <div style="font-size:0.7rem;color:#8C6B45;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Cobrado</div>
+      </div>
+    </div>
+
+    <!-- Módulos -->
+    <div class="module-grid">
+      <a class="module-btn" href="@Url.Action("Reportes","Dashboard")">
+        <span class="module-btn-icon">📊</span><span class="module-btn-label">Dashboard</span>
+      </a>
+      <a class="module-btn" href="@Url.Action("Index","Reservas")">
+        <span class="module-btn-icon">📋</span><span class="module-btn-label">Reservas</span>
+      </a>
+      <a class="module-btn" href="@Url.Action("Index","Clientes")">
+        <span class="module-btn-icon">👥</span><span class="module-btn-label">Clientes</span>
+      </a>
+      <a class="module-btn" href="@Url.Action("Index","Facturas")">
+        <span class="module-btn-icon">💰</span><span class="module-btn-label">Facturación</span>
+      </a>
+      <a class="module-btn" href="@Url.Action("Index","Monitoreo")">
+        <span class="module-btn-icon">📷</span><span class="module-btn-label">Cámaras</span>
+      </a>
+      <a class="module-btn" href="@Url.Action("Index","Empleados")">
+        <span class="module-btn-icon">👥</span><span class="module-btn-label">Empleados</span>
+      </a>
+    </div>
+
+    <form method="post" asp-action="Logout" asp-controller="Cuenta" style="width:100%;margin-top:0.5rem;">
+      @Html.AntiForgeryToken()
+      <button type="submit" class="logout-btn">↩ Cerrar sesión</button>
+    </form>
+  </div>
+</div>
+
+@section Scripts { <script src="~/js/login.js"></script> }

@@ -1,0 +1,173 @@
+@model IEnumerable<Reserva>
+@{ ViewData["Title"] = "Reservas"; }
+@{ var puedeGestionar = User.IsInRole(RolUsuario.Administrador) || User.IsInRole(RolUsuario.Empleado); }
+@{
+    var backUrl = User.IsInRole(RolUsuario.Administrador) ? Url.Action("Admin","Dashboard")
+                : User.IsInRole(RolUsuario.Empleado)      ? Url.Action("Empleado","Dashboard")
+                : Url.Action("Cliente","Dashboard");
+    var cameraToken = TempData["CameraToken"] as string;
+    var cameraUrl   = TempData["CameraUrl"]   as string;
+    var cameraMascota = TempData["CameraMsg"] as string;
+}
+
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+  <a href="@backUrl" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">← Regresar</a>
+  <h1 style="margin:0;">Reservas</h1>
+</div>
+<p class="subtitle">@(User.IsInRole(RolUsuario.Cliente) ? "Tus reservas de estadía y paseo" : "Todas las reservas registradas")</p>
+
+@* ── Modal enlace de cámara (aparece al confirmar una reserva) ── *@
+@if (!string.IsNullOrEmpty(cameraToken))
+{
+  <div id="camaraModal" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);">
+    <div style="background:linear-gradient(170deg,#FFFCF5,#FDF0D5);border-radius:20px;padding:2rem;max-width:480px;width:90%;box-shadow:0 24px 60px rgba(26,12,2,0.5);border:1px solid rgba(245,166,35,0.25);text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:0.5rem;">📷</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--cacao);margin:0 0 0.3rem;">¡Reserva confirmada!</h2>
+      <p style="color:var(--muted);font-size:0.86rem;font-weight:600;margin:0 0 1.2rem;">
+        Se generó el enlace de acceso a las cámaras para que <strong>@cameraMascota</strong> pueda ser monitoreado por su dueño.
+      </p>
+
+      <div style="background:var(--arena-2);border:1px dashed var(--arena-borde);border-radius:10px;padding:0.7rem;margin-bottom:1rem;font-size:0.72rem;color:var(--muted);font-family:monospace;word-break:break-all;text-align:left;">
+        @cameraUrl
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;">
+        <a href="https://wa.me/?text=@Uri.EscapeDataString($"🐾 Accede a las cámaras para ver a {cameraMascota} en VacanJef: {cameraUrl}")"
+           target="_blank"
+           style="display:flex;align-items:center;justify-content:center;gap:8px;padding:0.8rem;background:#1A3A1A;color:#4ADE80;border:1px solid #2A4A2A;border-radius:11px;font-weight:800;font-size:0.88rem;text-decoration:none;">
+          💬 Enviar por WhatsApp al cliente
+        </a>
+        <button onclick="copiarCamara(this)" data-url="@cameraUrl"
+                style="display:flex;align-items:center;justify-content:center;gap:8px;padding:0.8rem;background:var(--arena-2);color:var(--tierra);border:1.5px solid var(--arena-borde);border-radius:11px;font-weight:800;font-size:0.88rem;cursor:pointer;">
+          🔗 Copiar enlace
+        </button>
+        <a href="@cameraUrl" target="_blank"
+           style="display:flex;align-items:center;justify-content:center;gap:8px;padding:0.8rem;background:linear-gradient(135deg,#FFD166,#C47A0A);color:var(--cacao);border:none;border-radius:11px;font-weight:800;font-size:0.88rem;text-decoration:none;">
+          📺 Ver cámaras ahora
+        </a>
+      </div>
+
+      <button onclick="document.getElementById('camaraModal').remove()"
+              style="background:none;border:none;color:var(--muted);font-size:0.8rem;font-weight:700;cursor:pointer;">
+        Cerrar
+      </button>
+    </div>
+  </div>
+  <script>
+    function copiarCamara(btn) {
+      navigator.clipboard.writeText(btn.dataset.url).then(() => {
+        btn.textContent = '✅ ¡Copiado!';
+        setTimeout(() => btn.textContent = '🔗 Copiar enlace', 2500);
+      });
+    }
+  </script>
+}
+
+@if (User.IsInRole(RolUsuario.Cliente) || puedeGestionar)
+{
+  <a class="btn btn-primary" href="@Url.Action("Create")" style="margin-bottom:1.2rem;display:inline-block;">+ Nueva reserva</a>
+}
+
+<div class="card">
+  @if (!Model.Any())
+  {
+    <div class="empty-state">No hay reservas para mostrar todavía.</div>
+  }
+  else
+  {
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Mascota</th>
+          @if (!User.IsInRole(RolUsuario.Cliente)) { <th>Cliente</th> }
+          <th>Servicio</th><th>Ingreso</th><th>Salida</th><th>Estado</th>
+          @if (puedeGestionar) { <th>Acciones</th> }
+          <th>📷</th>
+        </tr>
+      </thead>
+      <tbody>
+      @foreach (var r in Model)
+      {
+        <tr>
+          <td>@r.Mascota?.Nombre</td>
+          @if (!User.IsInRole(RolUsuario.Cliente)) { <td>@r.Cliente?.Nombre @r.Cliente?.Apellido</td> }
+          <td>@r.TipoServicio?.NombreServicio</td>
+          <td>@r.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+          <td>@(r.FechaFin?.ToString("dd/MM/yyyy HH:mm") ?? "—")</td>
+          <td><span class="badge badge-@r.EstadoReserva.Replace(" ", "")">@r.EstadoReserva</span></td>
+          @if (puedeGestionar)
+          {
+            <td style="white-space:nowrap;">
+              @if (r.EstadoReserva == EstadoReserva.Pendiente)
+              {
+                <form method="post" asp-action="CambiarEstado" style="display:inline;">
+                  @Html.AntiForgeryToken()
+                  <input type="hidden" name="id" value="@r.IdReserva" />
+                  <input type="hidden" name="nuevoEstado" value="@EstadoReserva.Confirmada" />
+                  <button class="btn btn-secondary btn-sm" type="submit">Confirmar</button>
+                </form>
+              }
+              @if (r.EstadoReserva == EstadoReserva.Confirmada)
+              {
+                <form method="post" asp-action="CambiarEstado" style="display:inline;">
+                  @Html.AntiForgeryToken()
+                  <input type="hidden" name="id" value="@r.IdReserva" />
+                  <input type="hidden" name="nuevoEstado" value="@EstadoReserva.EnCurso" />
+                  <button class="btn btn-secondary btn-sm" type="submit">Iniciar</button>
+                </form>
+              }
+              @if (r.EstadoReserva == EstadoReserva.EnCurso)
+              {
+                <form method="post" asp-action="CambiarEstado" style="display:inline;">
+                  @Html.AntiForgeryToken()
+                  <input type="hidden" name="id" value="@r.IdReserva" />
+                  <input type="hidden" name="nuevoEstado" value="@EstadoReserva.Finalizada" />
+                  <button class="btn btn-secondary btn-sm" type="submit">Finalizar</button>
+                </form>
+              }
+              @if (r.EstadoReserva is EstadoReserva.Pendiente or EstadoReserva.Confirmada)
+              {
+                <form method="post" asp-action="CambiarEstado" style="display:inline;">
+                  @Html.AntiForgeryToken()
+                  <input type="hidden" name="id" value="@r.IdReserva" />
+                  <input type="hidden" name="nuevoEstado" value="@EstadoReserva.Cancelada" />
+                  <button class="btn btn-secondary btn-sm" type="submit" onclick="return confirm('¿Cancelar esta reserva?')">Cancelar</button>
+                </form>
+              }
+              @if (r.EstadoReserva == EstadoReserva.Finalizada)
+              {
+                <form method="post" asp-action="Generar" asp-controller="Facturas" style="display:inline;">
+                  @Html.AntiForgeryToken()
+                  <input type="hidden" name="idReserva" value="@r.IdReserva" />
+                  <button class="btn btn-secondary btn-sm" type="submit">Facturar</button>
+                </form>
+              }
+            </td>
+          }
+          @* Celda de cámara: siempre visible *@
+          <td>
+            @{
+              var acceso = ViewBag.AccesosCamara as Dictionary<int,string>;
+              var token  = acceso != null && acceso.ContainsKey(r.IdReserva) ? acceso[r.IdReserva] : null;
+            }
+            @if (token != null)
+            {
+              <a class="btn btn-secondary btn-sm"
+                 href="@Url.Action("Ver","Camara",new{token})"
+                 target="_blank"
+                 title="Ver cámaras en vivo"
+                 style="background:rgba(245,166,35,0.1);border-color:var(--sol);color:var(--sol-oscuro);">
+                📷 Ver
+              </a>
+            }
+            else if (r.EstadoReserva == EstadoReserva.Confirmada || r.EstadoReserva == EstadoReserva.EnCurso)
+            {
+              <span style="font-size:0.72rem;color:var(--muted);">Generando…</span>
+            }
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+</div>

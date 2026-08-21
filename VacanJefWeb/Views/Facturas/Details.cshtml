@@ -1,0 +1,153 @@
+@model Factura
+@{
+    ViewData["Title"] = $"Recibo #{Model.IdFactura}";
+    var r = Model.Reserva;
+    var dias = (r?.FechaFin is not null)
+        ? Math.Max(1, (int)Math.Ceiling((r.FechaFin.Value - r.FechaInicio).TotalDays))
+        : 1;
+    var esEstadia = (r?.TipoServicio?.NombreServicio ?? "").Contains("Estadia", StringComparison.OrdinalIgnoreCase);
+    var backUrl = User.IsInRole(RolUsuario.Administrador) ? Url.Action("Index","Facturas")
+                : Url.Action("Index","Facturas");
+}
+<style>
+  .recibo-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; flex-wrap:wrap; gap:0.8rem; }
+  .recibo-wrap { display:flex; justify-content:center; padding-bottom:2rem; }
+  .tirilla {
+    width:330px; background:#fff; color:#1a1a1a;
+    font-family:"Courier New", monospace; font-size:12px; line-height:1.5;
+    padding:1.4rem 1.2rem; box-shadow:0 8px 28px rgba(0,0,0,0.12);
+    border-radius:4px;
+  }
+  .tirilla-center { text-align:center; }
+  .tirilla-logo { width:54px; height:54px; object-fit:contain; margin:0 auto 0.4rem; display:block; }
+  .tirilla h1 { font-size:15px; font-weight:800; letter-spacing:0.04em; margin-bottom:2px; }
+  .tirilla .sub { font-size:10px; color:#555; margin-bottom:2px; }
+  .tirilla-dashed { border-top:1px dashed #999; margin:10px 0; }
+  .tirilla-row { display:flex; justify-content:space-between; font-size:11.5px; margin-bottom:3px; }
+  .tirilla-row b { font-weight:700; }
+  .tirilla-item { margin-bottom:8px; }
+  .tirilla-item-name { font-weight:700; font-size:12px; }
+  .tirilla-item-detail { font-size:10.5px; color:#555; }
+  .tirilla-item-price { text-align:right; font-weight:700; }
+  .tirilla-total-row { display:flex; justify-content:space-between; font-size:13px; font-weight:800; margin-top:6px; }
+  .tirilla-grand { font-size:16px; }
+  .tirilla-badge {
+    display:inline-block; margin-top:8px; padding:3px 12px; border-radius:14px;
+    font-size:10px; font-weight:800; letter-spacing:0.03em;
+  }
+  .tirilla-barcode { text-align:center; margin-top:14px; font-size:9px; letter-spacing:2px; color:#444; }
+  .tirilla-barcode-lines { font-family:"Libre Barcode 39", monospace; font-size:34px; letter-spacing:1px; line-height:1; }
+  .tirilla-footer { text-align:center; font-size:10px; color:#666; margin-top:10px; }
+
+  @@media print {
+    body.login-body, .navbar, .recibo-toolbar { display:none !important; }
+    .recibo-wrap { padding:0; }
+    .tirilla { box-shadow:none; width:300px; }
+    @@page { margin:0; size:80mm auto; }
+  }
+</style>
+
+<div class="recibo-toolbar">
+  <a href="@backUrl" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">← Volver a facturas</a>
+  <button onclick="window.print()" class="btn btn-primary">🖨️ Imprimir / Guardar PDF</button>
+</div>
+
+<div class="recibo-wrap">
+  <div class="tirilla" id="tirilla">
+
+    <div class="tirilla-center">
+      <img class="tirilla-logo" src="~/images/logo.png" alt="VacanJef">
+      <h1>CLUB CANINO VACANJEF</h1>
+      <div class="sub">Donde cada huella importa</div>
+      <div class="sub">Medellín, Colombia</div>
+      <div class="sub">NIT 900.000.000-0</div>
+    </div>
+
+    <div class="tirilla-dashed"></div>
+
+    <div class="tirilla-row"><span>Recibo No.</span><b>#@Model.IdFactura.ToString("D6")</b></div>
+    <div class="tirilla-row"><span>Fecha</span><b>@Model.FechaEmision.ToString("dd/MM/yyyy")</b></div>
+    <div class="tirilla-row"><span>Hora</span><b>@Model.FechaEmision.ToString("HH:mm")</b></div>
+    <div class="tirilla-row"><span>Reserva</span><b>#@(r?.IdReserva.ToString("D6") ?? "—")</b></div>
+
+    <div class="tirilla-dashed"></div>
+
+    <div class="tirilla-row"><span>CLIENTE</span></div>
+    <div class="tirilla-row"><b>@Model.Cliente?.Nombre @Model.Cliente?.Apellido</b></div>
+    <div class="tirilla-row" style="font-size:10.5px;color:#555;">
+      <span>@(Model.Cliente?.Telefono ?? "—")</span>
+    </div>
+
+    <div class="tirilla-dashed"></div>
+
+    <div class="tirilla-row"><span>MASCOTA</span></div>
+    <div class="tirilla-row"><b>@r?.Mascota?.Nombre</b><span style="font-size:10.5px;color:#555;">@r?.Mascota?.Especie · @(r?.Mascota?.Raza ?? "—")</span></div>
+
+    <div class="tirilla-dashed"></div>
+
+    <div class="tirilla-row"><span><b>DETALLE DEL SERVICIO</b></span></div>
+
+    <div class="tirilla-item">
+      <div style="display:flex;justify-content:space-between;">
+        <span class="tirilla-item-name">@r?.TipoServicio?.NombreServicio</span>
+        <span class="tirilla-item-price">$@Model.Subtotal.ToString("N0")</span>
+      </div>
+      <div class="tirilla-item-detail">
+        @if (esEstadia)
+        {
+          <span>@r?.FechaInicio.ToString("dd/MM/yyyy") → @(r?.FechaFin?.ToString("dd/MM/yyyy") ?? "—") (@dias día@(dias > 1 ? "s" : ""))</span>
+        }
+        else
+        {
+          <span>Fecha: @r?.FechaInicio.ToString("dd/MM/yyyy HH:mm")</span>
+        }
+      </div>
+      @if (r?.Empleado is not null)
+      {
+        <div class="tirilla-item-detail">Atendido por: @r.Empleado.Nombre @r.Empleado.Apellido</div>
+      }
+    </div>
+
+    <div class="tirilla-dashed"></div>
+
+    <div class="tirilla-row"><span>Subtotal</span><span>$@Model.Subtotal.ToString("N0")</span></div>
+    @if (Model.Descuento > 0)
+    {
+      <div class="tirilla-row"><span>Descuento</span><span>-$@Model.Descuento.ToString("N0")</span></div>
+    }
+    @if (Model.ImpuestoPct > 0)
+    {
+      <div class="tirilla-row"><span>IVA (@Model.ImpuestoPct%)</span><span>$@(((Model.Subtotal - Model.Descuento) * Model.ImpuestoPct / 100).ToString("N0"))</span></div>
+    }
+
+    <div class="tirilla-dashed"></div>
+
+    <div class="tirilla-total-row tirilla-grand">
+      <span>TOTAL</span><span>$@Model.Total.ToString("N0")</span>
+    </div>
+
+    <div class="tirilla-center" style="margin-top:8px;">
+      <span class="tirilla-badge" style="background:@(Model.EstadoPago=="Pagado"?"#DCFCE7":"#FEF3C7");color:@(Model.EstadoPago=="Pagado"?"#166534":"#92400E");">
+        @(Model.EstadoPago == "Pagado" ? "✓ PAGADO" : Model.EstadoPago.ToUpper())
+      </span>
+      @if (Model.MetodoPago is not null)
+      {
+        <div style="font-size:10px;color:#666;margin-top:4px;">Método: @Model.MetodoPago.NombreMetodo</div>
+      }
+    </div>
+
+    <div class="tirilla-dashed"></div>
+
+    <div class="tirilla-barcode">
+      <div class="tirilla-barcode-lines">*VJF@(Model.IdFactura.ToString("D8"))*</div>
+      VJF@(Model.IdFactura.ToString("D8"))
+    </div>
+
+    <div class="tirilla-footer">
+      ¡Gracias por confiar en nosotros! 🐾<br>
+      contacto@vacanjef.com · 300 000 0000<br>
+      <span style="font-size:9px;">Este documento es un comprobante interno,<br>no constituye factura electrónica DIAN.</span>
+    </div>
+
+  </div>
+</div>

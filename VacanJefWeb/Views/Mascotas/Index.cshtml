@@ -1,0 +1,43 @@
+@model IEnumerable<Mascota>
+@{ ViewData["Title"] = "Mascotas"; }
+@{
+    var backUrl = User.IsInRole(RolUsuario.Administrador) ? Url.Action("Admin","Dashboard")
+                : User.IsInRole(RolUsuario.Empleado)      ? Url.Action("Empleado","Dashboard")
+                : Url.Action("Cliente","Dashboard");
+}
+
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+  <a href="@backUrl" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">← Regresar</a>
+  <h1 style="margin:0;">Mascotas</h1>
+</div>
+<p class="subtitle">@(User.IsInRole(RolUsuario.Cliente) ? "Tus mascotas registradas" : "Todas las mascotas registradas en VacanJef")</p>
+
+<a class="btn btn-primary" href="@Url.Action("Create")" style="margin-bottom:1.2rem;display:inline-block;">+ Registrar mascota</a>
+
+<div class="card">
+  @if (!Model.Any())
+  {
+    <div class="empty-state">No hay mascotas registradas todavía.</div>
+  }
+  else
+  {
+    <table class="data">
+      <thead><tr><th>Nombre</th><th>Especie</th><th>Raza</th>@if(!User.IsInRole(RolUsuario.Cliente)){<th>Dueño</th>}<th></th></tr></thead>
+      <tbody>
+      @foreach (var m in Model)
+      {
+        <tr>
+          <td>@m.Nombre</td>
+          <td>@m.Especie</td>
+          <td>@m.Raza</td>
+          @if (!User.IsInRole(RolUsuario.Cliente))
+          {
+            <td>@m.Cliente?.Nombre @m.Cliente?.Apellido</td>
+          }
+          <td><a class="btn btn-secondary btn-sm" href="@Url.Action("Details",new{id=m.IdMascota})">Ver</a></td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+</div>

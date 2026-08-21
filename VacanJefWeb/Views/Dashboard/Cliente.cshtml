@@ -1,0 +1,80 @@
+@{
+    ViewData["Title"] = "Bienvenido";
+    ViewData["BodyClass"] = "login-body";
+    ViewData["FullScreen"] = true;
+    Layout = "_Layout";
+    var nombre = (string)(ViewBag.Nombre ?? "Cliente");
+}
+@section Styles { <link rel="stylesheet" href="~/css/login.css"> }
+
+<div class="bg-layer"></div>
+<div class="paws-bg" id="pawsBg"></div>
+
+<div class="wrapper">
+  <div class="brand-panel">
+    <div class="carousel" id="carousel">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=900&q=80" alt="" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=900&q=80" alt="" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&q=80" alt="" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=80" alt="" loading="lazy"></div>
+      </div>
+      <div class="carousel-overlay"></div>
+    </div>
+    <div class="brand-content">
+      <div class="logo-wrap">
+        <img class="logo-img" src="~/images/logo.png" alt="Logo VacanJef">
+      </div>
+      <div>
+        <div class="brand-features">
+          <div class="feature-item"><div class="feature-icon">📋</div><div>Gestión de reservas y hospedaje</div></div>
+          <div class="feature-item"><div class="feature-icon">🐕</div><div>Control de mascotas y clientes</div></div>
+          <div class="feature-item"><div class="feature-icon">📷</div><div>Monitoreo con cámaras en tiempo real</div></div>
+          <div class="feature-item"><div class="feature-icon">💳</div><div>Facturación y múltiples métodos de pago</div></div>
+        </div>
+        <div class="carousel-dots" id="carouselDots"></div>
+        <p class="brand-footer">© 2026 VacanJef · Medellín, Colombia</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="welcome-panel">
+    <div class="role-badge-pill">🐾 Cliente</div>
+    <h2 class="welcome-title">¡Hola, @nombre!</h2>
+    <p class="welcome-subtitle">Cliente · Cliente</p>
+
+    @{
+      var camToken   = ViewBag.CameraToken   as string;
+      var camMascota = ViewBag.CameraMascota as string;
+    }
+    @if (camToken != null)
+    {
+      <a href="@Url.Action("Ver","Camara",new{token=camToken})" target="_blank"
+         style="display:flex;align-items:center;gap:10px;width:100%;padding:0.9rem 1rem;margin-bottom:0.7rem;background:linear-gradient(135deg,#1A3A1A,#0A2A0A);border:1.5px solid #2A5A2A;border-radius:13px;text-decoration:none;">
+        <span style="font-size:1.6rem;animation:blink 1.5s ease-in-out infinite;">📷</span>
+        <div style="text-align:left;">
+          <div style="font-size:0.8rem;font-weight:800;color:#4ADE80;">🔴 EN VIVO — @camMascota está en VacanJef</div>
+          <div style="font-size:0.7rem;color:#2A6A2A;font-weight:600;">Toca aquí para ver las cámaras en tiempo real</div>
+        </div>
+      </a>
+    }
+
+    <div class="module-grid">
+      <a class="module-btn" href="@Url.Action("Index","Reservas")">
+        <span class="module-btn-icon">📋</span>
+        <span class="module-btn-label">Mis Reservas</span>
+      </a>
+      <a class="module-btn" href="@Url.Action("Index","Mascotas")">
+        <span class="module-btn-icon">🐾</span>
+        <span class="module-btn-label">Mis Mascotas</span>
+      </a>
+    </div>
+
+    <form method="post" asp-action="Logout" asp-controller="Cuenta" style="width:100%;">
+      @Html.AntiForgeryToken()
+      <button type="submit" class="logout-btn">↩ Cerrar sesión</button>
+    </form>
+  </div>
+</div>
+
+@section Scripts { <script src="~/js/login.js"></script> }

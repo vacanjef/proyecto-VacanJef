@@ -1,0 +1,134 @@
+@model List<EmpleadoTurnoViewModel>
+@{
+    ViewData["Title"] = "Empleados";
+    var backUrl = User.IsInRole(RolUsuario.Administrador) ? Url.Action("Admin","Dashboard") : Url.Action("Empleado","Dashboard");
+    var diaHoy = (string)(ViewBag.DiaHoy ?? "");
+    var dias = new[] { "Lun","Mar","Mie","Jue","Vie","Sab","Dom" };
+    var diasNombre = new Dictionary<string,string> {
+        {"Lun","Lunes"},{"Mar","Martes"},{"Mie","Miércoles"},{"Jue","Jueves"},
+        {"Vie","Viernes"},{"Sab","Sábado"},{"Dom","Domingo"}
+    };
+    var enTurnoCount = Model.Count(e => e.EnTurnoAhora);
+}
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:0.8rem;">
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <a href="@backUrl" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">← Regresar</a>
+    <div>
+      <h1 style="margin:0;font-family:'Syne',sans-serif;font-size:1.5rem;color:var(--cacao);">👥 Empleados</h1>
+      <p style="margin:0;font-size:0.82rem;color:var(--muted);font-weight:600;">@Model.Count empleados activos · @enTurnoCount en turno ahora mismo</p>
+    </div>
+  </div>
+  @if (User.IsInRole(RolUsuario.Administrador))
+  {
+    <a class="btn btn-primary" href="@Url.Action("Empleado","Registro")">+ Nuevo empleado</a>
+  }
+</div>
+
+<!-- Banner "en turno ahora" -->
+<div class="card" style="margin-bottom:1.2rem;background:rgba(39,103,73,0.06);border-color:rgba(39,103,73,0.2);">
+  <h2 style="font-size:0.9rem;margin-bottom:0.8rem;">🟢 En turno ahora mismo (@DateTime.Now.ToString("dddd, d 'de' MMMM · HH:mm", new System.Globalization.CultureInfo("es-CO")))</h2>
+  @if (enTurnoCount == 0)
+  {
+    <div class="empty-state" style="padding:1.2rem;">Nadie está en turno en este momento.</div>
+  }
+  else
+  {
+    <div style="display:flex;gap:0.7rem;flex-wrap:wrap;">
+      @foreach (var e in Model.Where(e => e.EnTurnoAhora))
+      {
+        <div style="display:flex;align-items:center;gap:8px;background:var(--crema);border:1.5px solid rgba(39,103,73,0.3);border-radius:50px;padding:6px 14px 6px 8px;">
+          <span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block;animation:pulse-dot 1.5s ease-in-out infinite;"></span>
+          <strong style="font-size:0.84rem;">@e.Nombre @e.Apellido</strong>
+          <span style="font-size:0.74rem;color:var(--muted);">· @e.Cargo</span>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Calendario semanal -->
+<div class="card" style="margin-bottom:1.2rem;overflow-x:auto;">
+  <h2 style="font-size:0.9rem;margin-bottom:1rem;">📅 Calendario semanal de turnos</h2>
+  <table class="data" style="min-width:760px;">
+    <thead>
+      <tr>
+        <th style="min-width:160px;">Empleado</th>
+        @foreach (var d in dias)
+        {
+          <th style="text-align:center;@(d==diaHoy ? "background:rgba(245,166,35,0.15);border-radius:8px 8px 0 0;" : "")">
+            @diasNombre[d]@(d==diaHoy ? " 📍" : "")
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+    @foreach (var e in Model)
+    {
+      <tr>
+        <td>
+          <strong>@e.Nombre @e.Apellido</strong><br>
+          <span style="font-size:0.72rem;color:var(--muted);">@e.Cargo</span>
+        </td>
+        @foreach (var d in dias)
+        {
+          var trabaja = e.DiasLaborales.Contains(d);
+          var esHoyYEnTurno = d == diaHoy && e.EnTurnoAhora;
+          <td style="text-align:center;@(d==diaHoy ? "background:rgba(245,166,35,0.06);" : "")">
+            @if (trabaja)
+            {
+              <div style="display:inline-block;padding:4px 8px;border-radius:8px;font-size:0.7rem;font-weight:700;
+                          background:@(esHoyYEnTurno ? "rgba(39,103,73,0.18)" : "rgba(245,166,35,0.12)");
+                          color:@(esHoyYEnTurno ? "#276749" : "#C47A0A");">
+                @e.TurnoInicio?.ToString(@"hh\:mm") - @e.TurnoFin?.ToString(@"hh\:mm")
+                @if (esHoyYEnTurno) { <text> 🟢</text> }
+              </div>
+            }
+            else
+            {
+              <span style="color:#ddd;font-size:0.85rem;">—</span>
+            }
+          </td>
+        }
+      </tr>
+    }
+    </tbody>
+  </table>
+</div>
+
+<!-- Tabla de contacto -->
+<div class="card">
+  <h2 style="font-size:0.9rem;margin-bottom:1rem;">📇 Directorio de empleados</h2>
+  <table class="data">
+    <thead><tr><th>Nombre</th><th>Cargo</th><th>Correo</th><th>Teléfono</th><th>Estado</th></tr></thead>
+    <tbody>
+    @foreach (var e in Model)
+    {
+      <tr>
+        <td><strong>@e.Nombre @e.Apellido</strong></td>
+        <td>@e.Cargo</td>
+        <td>@(e.Correo ?? "—")</td>
+        <td>@(e.Telefono ?? "—")</td>
+        <td>
+          @if (e.EnTurnoAhora)
+          {
+            <span class="badge" style="background:rgba(39,103,73,0.15);color:#276749;">🟢 En turno</span>
+          }
+          else if (e.TrabajaHoy)
+          {
+            <span class="badge" style="background:rgba(245,166,35,0.15);color:#C47A0A;">🟡 Hoy, fuera de horario</span>
+          }
+          else
+          {
+            <span class="badge" style="background:rgba(0,0,0,0.06);color:var(--muted);">⚪ Libre hoy</span>
+          }
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+</div>
+
+<style>
+@@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.85);} }
+</style>

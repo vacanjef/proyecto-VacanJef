@@ -1,0 +1,18 @@
+<svg width="230" height="230" viewBox="0 0 230 230" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD166"/>
+      <stop offset="45%" stop-color="#F5A623"/>
+      <stop offset="100%" stop-color="#C47A0A"/>
+    </linearGradient>
+  </defs>
+  <circle cx="115" cy="115" r="108" fill="url(#badgeGrad)" stroke="#FFF8E8" stroke-width="4"/>
+  <!-- huella de pata, estilo simple -->
+  <g fill="#2C1503">
+    <ellipse cx="115" cy="142" rx="38" ry="32"/>
+    <ellipse cx="74" cy="95" rx="16" ry="20" transform="rotate(-18 74 95)"/>
+    <ellipse cx="103" cy="72" rx="16" ry="20" transform="rotate(-6 103 72)"/>
+    <ellipse cx="138" cy="72" rx="16" ry="20" transform="rotate(6 138 72)"/>
+    <ellipse cx="163" cy="95" rx="16" ry="20" transform="rotate(18 163 95)"/>
+  </g>
+</svg>

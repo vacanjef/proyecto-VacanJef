@@ -1,0 +1,104 @@
+@model RegistroEmpleadoViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Registrar empleado";
+    Layout = "_Layout";
+}
+
+<h1>Registrar empleado</h1>
+<p class="subtitle">El empleado podrá iniciar sesión con el correo y contraseña que establezcas aquí</p>
+
+<div class="card" style="max-width:720px;">
+  @if (!ViewData.ModelState.IsValid)
+  {
+    <div class="alert alert-error">@Html.ValidationSummary(false)</div>
+  }
+
+  <form method="post" asp-action="Empleado" asp-controller="Registro">
+    @Html.AntiForgeryToken()
+
+    <!-- Datos personales -->
+    <h3 style="font-family:'Syne',sans-serif;color:var(--tierra);font-size:0.95rem;margin:0 0 1rem;text-transform:uppercase;letter-spacing:0.04em;">👤 Datos personales</h3>
+    <div class="form-row">
+      <div class="field-group">
+        <label class="field-label" asp-for="Nombre">Nombre *</label>
+        <input class="field-input" asp-for="Nombre" placeholder="Nombre">
+        <span class="field-error" asp-validation-for="Nombre"></span>
+      </div>
+      <div class="field-group">
+        <label class="field-label" asp-for="Apellido">Apellido *</label>
+        <input class="field-input" asp-for="Apellido" placeholder="Apellido">
+        <span class="field-error" asp-validation-for="Apellido"></span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field-group">
+        <label class="field-label" asp-for="Telefono">Teléfono</label>
+        <input class="field-input" asp-for="Telefono" placeholder="300 000 0000">
+      </div>
+      <div class="field-group">
+        <label class="field-label" asp-for="Direccion">Dirección</label>
+        <input class="field-input" asp-for="Direccion" placeholder="Dirección">
+      </div>
+    </div>
+
+    <!-- Cargo y contrato -->
+    <h3 style="font-family:'Syne',sans-serif;color:var(--tierra);font-size:0.95rem;margin:1.3rem 0 1rem;text-transform:uppercase;letter-spacing:0.04em;">💼 Cargo y contrato</h3>
+    <div class="form-row">
+      <div class="field-group">
+        <label class="field-label" asp-for="IdCargo">Cargo *</label>
+        <select class="field-input" asp-for="IdCargo"
+                asp-items="@(new SelectList(Model.CargosDisponibles, "IdCargo", "NombreCargo"))">
+          <option value="">-- Selecciona --</option>
+        </select>
+        <span class="field-error" asp-validation-for="IdCargo"></span>
+      </div>
+      <div class="field-group">
+        <label class="field-label" asp-for="Salario">Salario mensual ($)</label>
+        <input class="field-input" asp-for="Salario" type="number" step="1000" placeholder="2500000">
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" asp-for="FechaIngreso">Fecha de ingreso *</label>
+      <input class="field-input" asp-for="FechaIngreso" type="date" style="max-width:250px;">
+      <span class="field-error" asp-validation-for="FechaIngreso"></span>
+    </div>
+
+    <!-- Credenciales -->
+    <h3 style="font-family:'Syne',sans-serif;color:var(--tierra);font-size:0.95rem;margin:1.3rem 0 1rem;text-transform:uppercase;letter-spacing:0.04em;">🔐 Credenciales de acceso</h3>
+    <div class="field-group">
+      <label class="field-label" asp-for="Correo">Correo electrónico *</label>
+      <input class="field-input" asp-for="Correo" type="email" placeholder="empleado@vacanjef.com">
+      <span class="field-error" asp-validation-for="Correo"></span>
+    </div>
+    <div class="field-group">
+      <label class="field-label" asp-for="Password">Contraseña temporal *</label>
+      <input class="field-input" asp-for="Password" type="password" placeholder="Mínimo 6 caracteres"
+             style="max-width:320px;">
+      <span class="field-error" asp-validation-for="Password"></span>
+      <small style="color:var(--muted);font-size:0.76rem;font-weight:600;">El empleado podrá cambiarla luego.</small>
+    </div>
+
+    <!-- Contacto de emergencia -->
+    <h3 style="font-family:'Syne',sans-serif;color:var(--tierra);font-size:0.95rem;margin:1.3rem 0 1rem;text-transform:uppercase;letter-spacing:0.04em;">🚨 Contacto de emergencia <span style="font-size:0.7rem;background:var(--arena-2);color:var(--muted);border-radius:6px;padding:1px 6px;font-weight:700;">Opcional</span></h3>
+    <div class="form-row">
+      <div class="field-group">
+        <label class="field-label" asp-for="EmergenciaNombre">Nombre completo</label>
+        <input class="field-input" asp-for="EmergenciaNombre" placeholder="Nombre del contacto">
+      </div>
+      <div class="field-group">
+        <label class="field-label" asp-for="EmergenciaParentesco">Parentesco</label>
+        <input class="field-input" asp-for="EmergenciaParentesco" placeholder="Ej: Mamá, Esposo/a">
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" asp-for="EmergenciaTelefono">Teléfono de emergencia</label>
+      <input class="field-input" asp-for="EmergenciaTelefono" placeholder="300 000 0000" style="max-width:280px;">
+    </div>
+
+    <div style="display:flex;gap:0.8rem;margin-top:1.5rem;flex-wrap:wrap;">
+      <button type="submit" class="btn btn-primary">Registrar empleado 👤</button>
+      <a class="btn btn-secondary" href="@Url.Action("Admin","Dashboard")">Cancelar</a>
+    </div>
+  </form>
+</div>

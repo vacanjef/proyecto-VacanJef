@@ -1,0 +1,161 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+    ViewData["BodyClass"] = "login-body";
+    ViewData["FullScreen"] = true;
+    Layout = "_Layout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css">
+}
+
+<div class="bg-layer"></div>
+<div class="paws-bg" id="pawsBg"></div>
+
+<div class="wrapper">
+  <!-- ══ PANEL IZQUIERDO ══ -->
+  <div class="brand-panel">
+    <div class="carousel" id="carousel">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=900&q=80" alt="Perros jugando" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=900&q=80" alt="Golden Retriever" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&q=80" alt="Labrador feliz" loading="lazy"></div>
+        <div class="carousel-slide"><img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=80" alt="Mascotas en parque" loading="lazy"></div>
+      </div>
+      <div class="carousel-overlay"></div>
+    </div>
+    <div class="brand-content">
+      <div class="logo-wrap">
+        <img class="logo-img" src="~/images/logo.png" alt="Logo VacanJef">
+      </div>
+      <div>
+        <div class="brand-features">
+          <div class="feature-item"><div class="feature-icon">📋</div><div>Gestión de reservas y hospedaje</div></div>
+          <div class="feature-item"><div class="feature-icon">🐕</div><div>Control de mascotas y clientes</div></div>
+          <div class="feature-item"><div class="feature-icon">📷</div><div>Monitoreo con cámaras en tiempo real</div></div>
+          <div class="feature-item"><div class="feature-icon">💳</div><div>Facturación y múltiples métodos de pago</div></div>
+        </div>
+        <div class="carousel-dots" id="carouselDots"></div>
+        <p class="brand-footer">© 2026 VacanJef · Medellín, Colombia</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PANEL DERECHO ══ -->
+  <div class="form-panel">
+    <div class="form-header">
+      <h2>Bienvenido</h2>
+      <p>Inicia sesión para acceder al sistema</p>
+    </div>
+
+    <!-- Tabs de rol: solo visuales, el rol lo determina la BD -->
+    <div class="role-tabs" role="tablist">
+      <button class="role-tab" id="tab-admin"    role="tab">🛡️ Admin</button>
+      <button class="role-tab" id="tab-employee" role="tab">👤 Empleado</button>
+      <button class="role-tab" id="tab-client"   role="tab">🐾 Cliente</button>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+      <div class="alert-msg error show" role="alert">
+        <span>⚠️</span>
+        <div>@Html.ValidationSummary(true)</div>
+      </div>
+    }
+
+    <form method="post" asp-action="Login" id="loginForm">
+      @Html.AntiForgeryToken()
+      <input type="hidden" asp-for="ReturnUrl" />
+
+      <div class="field-group">
+        <label class="field-label" asp-for="Correo">Correo electrónico</label>
+        <div class="field-wrapper">
+          <input class="field-input" asp-for="Correo" id="email"
+                 placeholder="ejemplo@vacanjef.com" autocomplete="username"
+                 oninput="detectarRol(this.value)">
+          <span class="field-icon">✉️</span>
+        </div>
+        <span class="field-error" asp-validation-for="Correo"
+              style="color:#C0392B;font-size:0.78rem;font-weight:700;display:block;margin-top:3px;"></span>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" asp-for="Password">Contraseña</label>
+        <div class="field-wrapper">
+          <input class="field-input" asp-for="Password" id="Password"
+                 type="password" placeholder="••••••••" autocomplete="current-password">
+          <span class="field-icon">🔒</span>
+          <button class="toggle-pass" type="button" id="togglePass"
+                  onclick="togglePassword()" aria-label="Mostrar/ocultar contraseña">👁️</button>
+        </div>
+        <span class="field-error" asp-validation-for="Password"
+              style="color:#C0392B;font-size:0.78rem;font-weight:700;display:block;margin-top:3px;"></span>
+      </div>
+
+      <div class="form-extras">
+        <label class="remember-me">
+          <input type="checkbox" asp-for="RememberMe"> Recordarme
+        </label>
+        <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button class="btn-login" type="submit" id="btnLogin">
+        <div class="spinner" id="spinner"></div>
+        <span id="btnText">Iniciar Sesión</span>
+        <span class="btn-icon" id="btnArrow">→</span>
+      </button>
+    </form>
+
+    <div class="demo-hint">
+      <strong>🎯 Credenciales de prueba:</strong>
+      <div class="demo-row">
+        <span>🛡️ admin@vacanjef.com / admin123</span>
+        <button class="demo-fill" type="button"
+                onclick="fillDemo('admin@vacanjef.com','admin123')">Usar</button>
+      </div>
+      <div class="demo-row">
+        <span>👤 jorge.salinas@vacanjef.com / emp2026</span>
+        <button class="demo-fill" type="button"
+                onclick="fillDemo('jorge.salinas@vacanjef.com','emp2026')">Usar</button>
+      </div>
+      <div class="demo-row">
+        <span>🐾 carlos.ramirez@gmail.com / cliente123</span>
+        <button class="demo-fill" type="button"
+                onclick="fillDemo('carlos.ramirez@gmail.com','cliente123')">Usar</button>
+      </div>
+    </div>
+
+    <p class="register-link">
+      ¿Eres nuevo cliente? <a href="@Url.Action("Cliente","Registro")">Regístrate aquí</a>
+    </p>
+  </div>
+</div>
+
+@section Scripts {
+<script src="~/js/login.js"></script>
+<script>
+  // Detectar rol por dominio del correo y resaltar la tab correspondiente
+  function detectarRol(email) {
+    const tabs = {
+      'vacanjef.com': ['admin','employee'],
+      'gmail.com': ['client'], 'hotmail.com': ['client'],
+      'yahoo.com': ['client'], 'outlook.com': ['client']
+    };
+    const domain = email.split('@@')[1] || '';
+    const esVacanjef = domain === 'vacanjef.com';
+    document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+    if (esVacanjef) {
+      document.getElementById('tab-admin').classList.add('active');
+    } else if (domain) {
+      document.getElementById('tab-client').classList.add('active');
+    }
+  }
+  // Spinner al enviar el formulario
+  document.getElementById('loginForm').addEventListener('submit', function() {
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('btnText').textContent = 'Verificando...';
+    document.getElementById('btnArrow').style.display = 'none';
+    document.getElementById('btnLogin').disabled = true;
+  });
+</script>
+}

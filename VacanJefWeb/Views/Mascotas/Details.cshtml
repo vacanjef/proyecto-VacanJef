@@ -1,0 +1,44 @@
+@model Mascota
+@{ ViewData["Title"] = Model.Nombre; }
+
+<h1>@Model.Nombre</h1>
+<p class="subtitle">@Model.Especie · @Model.Raza · dueño: @Model.Cliente?.Nombre @Model.Cliente?.Apellido</p>
+
+<div class="card">
+  <h2>Ficha</h2>
+  <table class="data">
+    <tr><th>Sexo</th><td>@(Model.Sexo == "M" ? "Macho" : Model.Sexo == "H" ? "Hembra" : "—")</td></tr>
+    <tr><th>Fecha de nacimiento</th><td>@(Model.FechaNacimiento?.ToString("dd/MM/yyyy") ?? "—")</td></tr>
+    <tr><th>Color</th><td>@Model.Color</td></tr>
+    <tr><th>Peso</th><td>@(Model.PesoKg is null ? "—" : $"{Model.PesoKg} kg")</td></tr>
+    <tr><th>Alergias</th><td>@Model.Alergias</td></tr>
+    <tr><th>Medicamentos</th><td>@Model.Medicamentos</td></tr>
+    <tr><th>Carné de vacunas</th><td>@Model.CarnetVacunas</td></tr>
+    <tr><th>Observaciones</th><td>@Model.Observaciones</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Historial de reservas</h2>
+  @if (!Model.Reservas.Any())
+  {
+    <div class="empty-state">Esta mascota aún no tiene reservas.</div>
+  }
+  else
+  {
+    <table class="data">
+      <thead><tr><th>Servicio</th><th>Ingreso</th><th>Salida</th><th>Estado</th></tr></thead>
+      <tbody>
+      @foreach (var r in Model.Reservas.OrderByDescending(r => r.FechaInicio))
+      {
+        <tr>
+          <td>@r.TipoServicio?.NombreServicio</td>
+          <td>@r.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+          <td>@(r.FechaFin?.ToString("dd/MM/yyyy HH:mm") ?? "—")</td>
+          <td><span class="badge badge-@r.EstadoReserva.Replace(" ", "")">@r.EstadoReserva</span></td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+</div>

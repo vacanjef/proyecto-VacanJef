@@ -1,0 +1,35 @@
+@model string?
+@{
+    ViewData["Title"] = "Enlace inválido";
+    ViewData["FullScreen"] = true;
+    Layout = "_Layout";
+}
+<style>
+  body.login-body { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+  .invalid-card {
+    position:relative; z-index:10;
+    background:linear-gradient(170deg,#FFFCF5,#FDF0D5);
+    border-radius:20px; padding:2.5rem 2rem; max-width:420px; width:100%;
+    text-align:center; box-shadow:0 24px 60px rgba(26,12,2,0.6);
+    border:1px solid rgba(245,166,35,0.2);
+  }
+  .invalid-icon { font-size:3.5rem; margin-bottom:1rem; }
+  .invalid-title { font-family:"Syne",sans-serif; font-size:1.5rem; font-weight:800; color:#2C1503; margin:0 0 0.5rem; }
+  .invalid-msg   { color:#8C6B45; font-size:0.88rem; font-weight:600; margin:0 0 1.5rem; }
+  .btn-home { display:inline-flex; align-items:center; gap:6px; padding:0.8rem 1.8rem;
+    background:linear-gradient(135deg,#FFD166,#C47A0A); border:none; border-radius:12px;
+    font-family:"Nunito",sans-serif; font-weight:900; font-size:0.92rem; color:#2C1503;
+    cursor:pointer; text-decoration:none; }
+</style>
+
+<div class="bg-layer"></div>
+<div class="paws-bg" id="pawsBg"></div>
+
+<div class="invalid-card">
+  <div class="invalid-icon">🔒</div>
+  <h1 class="invalid-title">Enlace no válido</h1>
+  <p class="invalid-msg">@(Model ?? "Este enlace de acceso a las cámaras no es válido, fue desactivado o ya expiró.")</p>
+  <a class="btn-home" href="@Url.Action("Index","Home")">🏠 Ir al inicio</a>
+</div>
+
+@section Scripts { <script src="~/js/login.js"></script> }

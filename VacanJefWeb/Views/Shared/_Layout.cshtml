@@ -1,0 +1,76 @@
+@using System.Security.Claims
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VacanJef – @ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css">
+    @RenderSection("Styles", required: false)
+</head>
+<body class="@ViewData["BodyClass"]">
+@{
+    var rol = User.FindFirstValue(ClaimTypes.Role);
+    var pantallaCompleta = ViewData["FullScreen"] is true;
+    var pantallaAncha    = ViewData["FullWidth"]  is true;
+}
+@if (!pantallaCompleta)
+{
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <header class="navbar">
+            <a class="brand" href="@(rol == RolUsuario.Administrador ? Url.Action("Admin","Dashboard") : rol == RolUsuario.Empleado ? Url.Action("Empleado","Dashboard") : Url.Action("Cliente","Dashboard"))">🐾 VacanJef</a>
+            <nav>
+                @if (rol == RolUsuario.Administrador)
+                {
+                    <a href="@Url.Action("Admin","Dashboard")">Panel</a>
+                }
+                else if (rol == RolUsuario.Empleado)
+                {
+                    <a href="@Url.Action("Empleado","Dashboard")">Panel</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Cliente","Dashboard")">Panel</a>
+                }
+                <a href="@Url.Action("Index","Mascotas")">Mascotas</a>
+                <a href="@Url.Action("Index","Reservas")">Reservas</a>
+                <a href="@Url.Action("Index","Facturas")">Facturas</a>
+                @if (rol == RolUsuario.Administrador || rol == RolUsuario.Empleado)
+                {
+                    <a href="@Url.Action("Index","Monitoreo")" style="display:flex;align-items:center;gap:4px;">📷 Cámaras</a>
+                }
+                <span class="user-pill">@(rol switch { RolUsuario.Administrador => "🛡️ Admin", RolUsuario.Empleado => "👤 Empleado", _ => "🐾 Cliente" })</span>
+                <form method="post" action="@Url.Action("Logout","Cuenta")">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="logout">Salir</button>
+                </form>
+            </nav>
+        </header>
+    }
+    else
+    {
+        <header class="navbar">
+            <a class="brand" href="@Url.Action("Index","Home")" style="display:flex;align-items:center;gap:0.5rem;">
+                <img src="~/images/logo.png" alt="Logo VacanJef" style="width:38px;height:38px;object-fit:contain;" /> VacanJef
+            </a>
+            <nav>
+                <a href="@Url.Action("Index","Home")#servicios">Servicios</a>
+                <a href="@Url.Action("Index","Home")#nosotros">Sobre nosotros</a>
+                <a href="@Url.Action("Index","Home")#contacto">Contacto</a>
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Login","Cuenta")">Iniciar sesión</a>
+            </nav>
+        </header>
+    }
+}
+<main class="@(pantallaCompleta ? "" : pantallaAncha ? "full-width-page" : "page")">
+    @if (!pantallaCompleta && TempData["Mensaje"] is string mensaje)
+    {
+        <div class="alert alert-success">@mensaje</div>
+    }
+    @RenderBody()
+</main>
+@RenderSection("Scripts", required: false)
+</body>
+</html>

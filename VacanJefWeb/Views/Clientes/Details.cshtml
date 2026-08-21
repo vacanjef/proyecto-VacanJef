@@ -1,0 +1,109 @@
+@model Cliente
+@{
+    ViewData["Title"] = $"Cliente #{Model.IdCliente}";
+    int totalRes  = (int)ViewBag.TotalReservas;
+    int totalMas  = (int)ViewBag.TotalMascotas;
+    int resActivas = (int)ViewBag.ReservasActivas;
+}
+
+<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap;">
+  <a href="@Url.Action("Index","Clientes")"
+     style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--arena-borde);border-radius:10px;background:var(--crema);font-weight:800;font-size:0.84rem;color:var(--tierra);text-decoration:none;">
+    ← Volver a Clientes
+  </a>
+  <div>
+    <h1 style="margin:0;font-family:'Syne',sans-serif;font-size:1.5rem;color:var(--cacao);">
+      @Model.Nombre @Model.Apellido
+    </h1>
+    <p style="margin:0;font-size:0.82rem;color:var(--muted);font-weight:600;">
+      Cliente #@Model.IdCliente · Registrado el @Model.FechaRegistro.ToString("dd/MM/yyyy")
+    </p>
+  </div>
+</div>
+
+<!-- KPIs del cliente -->
+<div class="grid-stats" style="margin-bottom:1.3rem;">
+  <div class="stat"><div class="num">@totalMas</div><div class="label">Mascotas</div></div>
+  <div class="stat"><div class="num">@totalRes</div><div class="label">Total reservas</div></div>
+  <div class="stat"><div class="num">@resActivas</div><div class="label">Reservas activas</div></div>
+</div>
+
+<!-- Datos personales -->
+<div class="card" style="margin-bottom:1.1rem;">
+  <h2>📋 Datos personales</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem 1.5rem;">
+    <div><span style="font-size:0.72rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.04em;">ID</span><br><strong style="font-family:monospace;">#@Model.IdCliente</strong></div>
+    <div><span style="font-size:0.72rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.04em;">Correo</span><br><strong>@(Model.Correo ?? "—")</strong></div>
+    <div><span style="font-size:0.72rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.04em;">Teléfono</span><br><strong>@(Model.Telefono ?? "—")</strong></div>
+    <div><span style="font-size:0.72rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:0.04em;">Dirección</span><br><strong>@(Model.Direccion ?? "—")</strong></div>
+  </div>
+  @if (Model.Contactos.Any())
+  {
+    <hr style="border:none;border-top:1px solid var(--arena-2);margin:1rem 0;">
+    <h3 style="font-family:'Syne',sans-serif;font-size:0.85rem;color:var(--tierra);margin:0 0 0.6rem;">🚨 Contacto de emergencia</h3>
+    @foreach (var ct in Model.Contactos)
+    {
+      <p style="margin:0;font-size:0.88rem;">
+        <strong>@ct.Nombre @ct.Apellido</strong> · @ct.Parentesco · @ct.Telefono
+      </p>
+    }
+  }
+</div>
+
+<!-- Mascotas -->
+<div class="card" style="margin-bottom:1.1rem;">
+  <h2>🐶 Mascotas (@Model.Mascotas.Count(m => m.Activo))</h2>
+  @if (!Model.Mascotas.Any(m => m.Activo))
+  {
+    <div class="empty-state">Este cliente no tiene mascotas registradas.</div>
+  }
+  else
+  {
+    <table class="data">
+      <thead><tr><th>ID</th><th>Nombre</th><th>Especie</th><th>Raza</th><th>Sexo</th><th>Peso</th></tr></thead>
+      <tbody>
+      @foreach (var m in Model.Mascotas.Where(m => m.Activo))
+      {
+        <tr>
+          <td style="font-family:monospace;font-size:0.78rem;color:var(--muted);">#@m.IdMascota</td>
+          <td><strong>@m.Nombre</strong></td>
+          <td>@m.Especie</td>
+          <td>@(m.Raza ?? "—")</td>
+          <td>@(m.Sexo == "M" ? "Macho" : m.Sexo == "H" ? "Hembra" : "—")</td>
+          <td>@(m.PesoKg is null ? "—" : $"{m.PesoKg} kg")</td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+</div>
+
+<!-- Historial de reservas -->
+<div class="card">
+  <h2>📅 Historial de reservas (@Model.Reservas.Count)</h2>
+  @if (!Model.Reservas.Any())
+  {
+    <div class="empty-state">Este cliente no tiene reservas todavía.</div>
+  }
+  else
+  {
+    <table class="data">
+      <thead>
+        <tr><th>ID</th><th>Mascota</th><th>Servicio</th><th>Ingreso</th><th>Salida</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+      @foreach (var r in Model.Reservas.OrderByDescending(r => r.FechaInicio))
+      {
+        <tr>
+          <td style="font-family:monospace;font-size:0.78rem;color:var(--muted);">#@r.IdReserva</td>
+          <td>@r.Mascota?.Nombre</td>
+          <td>@r.TipoServicio?.NombreServicio</td>
+          <td>@r.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+          <td>@(r.FechaFin?.ToString("dd/MM/yyyy HH:mm") ?? "—")</td>
+          <td><span class="badge badge-@r.EstadoReserva.Replace(" ","")">@r.EstadoReserva</span></td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+</div>
