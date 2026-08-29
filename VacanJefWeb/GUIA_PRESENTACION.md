@@ -274,13 +274,14 @@ docker stats
 
 ---
 
-## CREDENCIALES DE PRUEBA
+## CREDENCIALES DE PRUEBA..
 
 | Rol | Correo | Contraseña |
 |-----|--------|------------|
 | Admin | admin@vacanjef.com | admin123 |
 | Empleado | jorge.salinas@vacanjef.com | emp2026 |
 | Cliente | carlos.ramirez@gmail.com | cliente123 |
+| Cliente | lucia.gomez@hotmail.com | cliente123 |
 
 **URL en Docker:** http://localhost:8080
 

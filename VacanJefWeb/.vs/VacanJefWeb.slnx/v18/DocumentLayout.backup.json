@@ -1,7 +1,16 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\El Sarra\\Desktop\\proyecto\\VacanJefWeb\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|c:\\users\\el sarra\\desktop\\sexto trimestre\\scrum\\proyecto vacanjef\\vacanjefweb\\guia_presentacion.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|solutionrelative:guia_presentacion.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|c:\\users\\el sarra\\desktop\\sexto trimestre\\scrum\\proyecto vacanjef\\vacanjefweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -18,6 +27,32 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GUIA_PRESENTACION.md",
+              "DocumentMoniker": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\GUIA_PRESENTACION.md",
+              "RelativeDocumentMoniker": "GUIA_PRESENTACION.md",
+              "ToolTip": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\GUIA_PRESENTACION.md",
+              "RelativeToolTip": "GUIA_PRESENTACION.md",
+              "ViewState": "AgIAAAgBAAAAAAAAAAAAABsBAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-08-29T02:08:48.03Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T02:08:27.847Z",
+              "EditorCaption": ""
             }
           ]
         }

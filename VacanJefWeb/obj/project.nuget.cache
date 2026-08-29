@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GYSbPjsW5Tw=",
+  "dgSpecHash": "rPDAAyBV/ak=",
   "success": true,
-  "projectFilePath": "D:\\SENA\\5 Quinto trimestre\\proyecto\\VacanJefWeb\\VacanJefWeb.csproj",
+  "projectFilePath": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\VacanJefWeb.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\El Sarra\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\El Sarra\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

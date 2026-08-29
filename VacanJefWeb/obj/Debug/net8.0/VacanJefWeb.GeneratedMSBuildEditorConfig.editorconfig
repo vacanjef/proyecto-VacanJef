@@ -12,113 +12,113 @@ build_property.EntryPointFilePath =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = VacanJefWeb
 build_property.RootNamespace = VacanJefWeb
-build_property.ProjectDir = D:\SENA\5 Quinto trimestre\proyecto\VacanJefWeb\
+build_property.ProjectDir = C:\Users\El Sarra\Desktop\sexto trimestre\scrum\proyecto VacanJef\VacanJefWeb\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\SENA\5 Quinto trimestre\proyecto\VacanJefWeb
+build_property.MSBuildProjectDirectory = C:\Users\El Sarra\Desktop\sexto trimestre\scrum\proyecto VacanJef\VacanJefWeb
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Camara/TokenInvalido.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Camara/TokenInvalido.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FtYXJhXFRva2VuSW52YWxpZG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Camara/Ver.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Camara/Ver.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FtYXJhXFZlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Clientes/Details.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Clientes/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Clientes/Index.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Clientes/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50ZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Cuenta/Error.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Cuenta/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Cuenta/Login.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Cuenta/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VlbnRhXExvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Dashboard/Admin.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Dashboard/Admin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEFkbWluLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Dashboard/Cliente.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Dashboard/Cliente.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXENsaWVudGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Dashboard/Empleado.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Dashboard/Empleado.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEVtcGxlYWRvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Dashboard/Reportes.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Dashboard/Reportes.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFJlcG9ydGVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Empleados/Index.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Empleados/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbGVhZG9zXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Facturas/Details.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Facturas/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFjdHVyYXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Facturas/Index.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Facturas/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFjdHVyYXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Home/Index.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Mascotas/Create.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Mascotas/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzY290YXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Mascotas/Details.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Mascotas/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzY290YXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Mascotas/Index.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Mascotas/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFzY290YXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Monitoreo/Index.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Monitoreo/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW9uaXRvcmVvXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Registro/Cliente.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Registro/Cliente.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0cm9cQ2xpZW50ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Registro/Empleado.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Registro/Empleado.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0cm9cRW1wbGVhZG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Reservas/Create.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Reservas/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Reservas/Index.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Reservas/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/Shared/_Layout.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/_ViewImports.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/SENA/5 Quinto trimestre/proyecto/VacanJefWeb/Views/_ViewStart.cshtml]
+[C:/Users/El Sarra/Desktop/sexto trimestre/scrum/proyecto VacanJef/VacanJefWeb/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

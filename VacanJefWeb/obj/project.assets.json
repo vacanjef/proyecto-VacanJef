@@ -4823,11 +4823,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SENA\\5 Quinto trimestre\\proyecto\\VacanJefWeb\\VacanJefWeb.csproj",
+      "projectUniqueName": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\VacanJefWeb.csproj",
       "projectName": "VacanJefWeb",
-      "projectPath": "D:\\SENA\\5 Quinto trimestre\\proyecto\\VacanJefWeb\\VacanJefWeb.csproj",
+      "projectPath": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\VacanJefWeb.csproj",
       "packagesPath": "C:\\Users\\El Sarra\\.nuget\\packages\\",
-      "outputPath": "D:\\SENA\\5 Quinto trimestre\\proyecto\\VacanJefWeb\\obj\\",
+      "outputPath": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4862,7 +4862,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.300"
+      "SdkAnalysisLevel": "10.0.400"
     },
     "frameworks": {
       "net8.0": {
@@ -4907,7 +4907,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
