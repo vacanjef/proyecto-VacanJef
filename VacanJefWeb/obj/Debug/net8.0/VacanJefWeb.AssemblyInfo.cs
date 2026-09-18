@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VacanJefWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+949c7501c540f609588178878ebcdbf73468ad3c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6940c0bcea0850dd9296cb1f462630825bdc8aec")]
 [assembly: System.Reflection.AssemblyProductAttribute("VacanJefWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VacanJefWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

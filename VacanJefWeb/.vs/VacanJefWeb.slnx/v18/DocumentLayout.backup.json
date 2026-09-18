@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|c:\\users\\el sarra\\desktop\\sexto trimestre\\scrum\\proyecto vacanjef\\vacanjefweb\\guia_presentacion.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
-      "RelativeMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|solutionrelative:guia_presentacion.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+      "AbsoluteMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|c:\\users\\el sarra\\desktop\\sexto trimestre\\scrum\\proyecto vacanjef\\vacanjefweb\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|c:\\users\\el sarra\\desktop\\sexto trimestre\\scrum\\proyecto vacanjef\\vacanjefweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|c:\\users\\el sarra\\desktop\\sexto trimestre\\scrum\\proyecto vacanjef\\vacanjefweb\\data\\vacanjefcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8FB85497-57C3-BA52-D77B-6C40C6A9C8C9}|VacanJefWeb.csproj|solutionrelative:data\\vacanjefcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,28 +31,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GUIA_PRESENTACION.md",
-              "DocumentMoniker": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\GUIA_PRESENTACION.md",
-              "RelativeDocumentMoniker": "GUIA_PRESENTACION.md",
-              "ToolTip": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\GUIA_PRESENTACION.md",
-              "RelativeToolTip": "GUIA_PRESENTACION.md",
-              "ViewState": "AgIAAAgBAAAAAAAAAAAAABsBAAACAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2026-08-29T02:08:48.03Z",
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-12T05:56:48.64Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "VacanJefContext.cs",
+              "DocumentMoniker": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\Data\\VacanJefContext.cs",
+              "RelativeDocumentMoniker": "Data\\VacanJefContext.cs",
+              "ToolTip": "C:\\Users\\El Sarra\\Desktop\\sexto trimestre\\scrum\\proyecto VacanJef\\VacanJefWeb\\Data\\VacanJefContext.cs",
+              "RelativeToolTip": "Data\\VacanJefContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-29T02:08:27.847Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-12T05:34:22.53Z"
             }
           ]
         }

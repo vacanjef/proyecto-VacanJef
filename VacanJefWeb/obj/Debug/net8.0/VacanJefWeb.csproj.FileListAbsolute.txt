@@ -287,3 +287,4 @@ C:\Users\El Sarra\Desktop\sexto trimestre\scrum\proyecto VacanJef\VacanJefWeb\ob
 C:\Users\El Sarra\Desktop\sexto trimestre\scrum\proyecto VacanJef\VacanJefWeb\obj\Debug\net8.0\VacanJefWeb.pdb
 C:\Users\El Sarra\Desktop\sexto trimestre\scrum\proyecto VacanJef\VacanJefWeb\obj\Debug\net8.0\VacanJefWeb.genruntimeconfig.cache
 C:\Users\El Sarra\Desktop\sexto trimestre\scrum\proyecto VacanJef\VacanJefWeb\obj\Debug\net8.0\ref\VacanJefWeb.dll
+C:\Users\El Sarra\Desktop\sexto trimestre\scrum\proyecto VacanJef\VacanJefWeb\obj\Debug\net8.0\VacanJefWeb.sourcelink.json

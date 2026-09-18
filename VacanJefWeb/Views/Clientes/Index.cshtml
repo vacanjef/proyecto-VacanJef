@@ -96,11 +96,13 @@
             <span class="badge" style="background:@(c.Activo?"rgba(39,103,73,0.12)":"rgba(192,57,43,0.1)");color:@(c.Activo?"var(--exito)":"var(--error)");">
               @(c.Activo ? "Activo" : "Inactivo")
             </span>
+            <br />
           </td>
           <td>
             <a class="btn btn-secondary btn-sm" href="@Url.Action("Details",new{id=c.IdCliente})">Ver detalle</a>
           </td>
         </tr>
+        <br />
       }
       </tbody>
     </table>

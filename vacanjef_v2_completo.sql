@@ -15,19 +15,9 @@
 --     Clientes   : [correo]                   / cliente123
 -- ============================================================
 
-USE master;
-GO
-
--- ── Eliminar BD anterior (desconecta sesiones activas) ───────
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'VacanJef')
-BEGIN
-    ALTER DATABASE VacanJef SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE VacanJef;
-END
-GO
 
 CREATE DATABASE VacanJef
-    COLLATE Modern_Spanish_CI_AI;
+    
 GO
 
 USE VacanJef;

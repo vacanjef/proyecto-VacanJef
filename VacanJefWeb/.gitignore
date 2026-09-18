@@ -1,0 +1,22 @@
+# Visual Studio
+.vs/
+
+# Archivos compilados
+bin/
+obj/
+
+# Archivos de usuario
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# ASP.NET
+appsettings.Development.json

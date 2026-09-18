@@ -142,24 +142,3 @@ sustituirse por fotos reales (`<img>` en lugar de los `<div class="gallery-ph">`
 
 
 ## cambio para realizar commit de una HU-01: Registrar Mascota
-## HU-01 · Inicio de sesión por rol
-## HU-02 · Registro de nuevo cliente
-## HU-03 · Registro de empleado (solo Admin)
-## HU-04 · Crear reserva (Cliente)
-## HU-05 · Crear reserva (Admin/Empleado)
-## HU-06 · Confirmar, iniciar y finalizar reserva
-## HU-07 · Registrar mascota
-## HU-08 · Ver mis mascotas (Cliente)
-## HU-09 · Listar y filtrar clientes
-## HU-10 · Ver ficha completa de un cliente
-## HU-11 · Generar factura desde una reserva
-## HU-12 · Ver recibo tipo tirilla
-## HU-13 · Marcar factura como pagada
-## HU-14 · Generar enlace de cámara al confirmar reserva
-## HU-15 · Ver cámaras sin necesidad de login
-## HU-16 · Banner de estadía activa en dashboard del cliente
-## HU-17 · Ver calendario de turnos del equipo
-## HU-18 · Ver dashboard con gráficas de operación
-## HU-19 · Exportar reportes a Excel y PDF
-## HU-20 · Login en app Android
-## HU-21 · Ver cámaras de mascotas en estadía desde la app
